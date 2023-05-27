@@ -9,6 +9,7 @@ let SteamAuth = require("node-steam-openid");
 const cors = require('cors');
 let puppeteer = require('puppeteer');
 const multer = require('multer');
+const createProxyMiddleware = require('http-proxy-middleware')
 const { authenticate } = require('@xboxreplay/xboxlive-auth');
 const { exchangeCodeForAccessToken, exchangeNpssoForCode, makeUniversalSearch } = require('psn-api');
 const { resolve } = require('path');
@@ -17,6 +18,7 @@ const { platform, userInfo } = require('os');
 const { throws } = require('assert');
 const { response } = require('express');
 const { error } = require('console');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 //#region headers and BDConnection setup
 let xboxHeaders = {
   'x-xbl-contract-version': 2
