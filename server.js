@@ -1090,6 +1090,7 @@ async function getPrices(platform, gameId) {
       }
 
     } else {
+      console.log("Searching price for steam");
       try {
         await page.waitForSelector(itemPath.get(platform));
         itemData[0] = await page.evaluate((itemPath) => {
@@ -1108,10 +1109,11 @@ async function getPrices(platform, gameId) {
       }
       //go to g2a
       try {
+        console.log("Searching price for g2a");
         await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36');
         await page.goto(pagesMap.get("g2a"), { "waitUntil": "load" });
         await page.screenshot({ path: 'webos.jpg' });
-        //console.log(pagesMap.get("g2a"));
+      
         await page.waitForSelector(itemPath.get("g2a"));
 
         itemData[1] = await page.evaluate((itemPath) => {
@@ -1133,6 +1135,7 @@ async function getPrices(platform, gameId) {
 
       //go to cdKeys
       try {
+        console.log("Searching price for cdkeys");
         await page.goto(pagesMap.get("cdKeys", { "waitUntil": "load" }));
 
         await page.waitForSelector(itemPath.get("cdKeys"));
