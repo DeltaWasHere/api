@@ -1097,7 +1097,7 @@ async function getPrices(platform, gameId) {
           let element = document.querySelector(itemPath);
           return {
             link: element.getAttribute('href'),
-            price: ((parseFloat(element.querySelector('.col.search_price_discount_combined.responsive_secondrow').getAttribute("data-price-final")) / 100) / 21).toFixed(2)
+            price: ((parseFloat(element.querySelector('.col.search_price_discount_combined.responsive_secondrow')
           }
         }, itemPath.get(platform));
       } catch (error) {
@@ -1143,7 +1143,7 @@ async function getPrices(platform, gameId) {
           let price = element.querySelector('.price-wrapper div span').textContent;
           return {
             link: element.querySelector('.result-thumbnail a').getAttribute("href"),
-            price: (parseFloat(price.substring(0, price.length - 4)) / 21).toFixed(2)
+            price: price
           }
         }, itemPath.get("cdKeys"));
       } catch (error) {
