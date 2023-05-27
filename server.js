@@ -1423,7 +1423,7 @@ function getUnlockedAchievementsForGameId(userId, gameId, platform) {
     }
     //request to get the achievements of certain gameId
     request({ headers: headers, uri: url }, function (err, response, body) {
-      responseParsed = body;
+      responseParsed = JSON.parse(body);
 
       let achievements = [], unlocktime, id, achieved, achievedCondition;
       switch (platform) {
