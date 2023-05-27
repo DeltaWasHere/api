@@ -40,18 +40,11 @@ let connection = mysql.createConnection({
 app.use(
   '/api',
   createProxyMiddleware({
-    target: 'http://api-production-827a.up.railway.app',
+    target: 'https//api-production-827a.up.railway.app',
     changeOrigin: true,
   })
 );
 
-app.use(cors());
-
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
 
 
 //#endregion
