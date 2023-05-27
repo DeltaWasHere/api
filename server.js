@@ -1119,7 +1119,7 @@ async function getPrices(platform, gameId) {
           let element = document.querySelector(itemPath);
           return {
             link: "https://www.g2a.com" + element.querySelector('.sc-iqAclL.sc-dIsUp.dJFpVb.eHDAgC.sc-kHWWYL.kfrcst a').getAttribute("href"),
-            price: element.querySelector('.sc-iqAclL.sc-crzoAE.dJFpVb.eqnGHx.sc-bqGGPW.fIHClq').textContent.substring(2)
+            price: element.querySelector('.sc-iqAclL.sc-crzoAE.dJFpVb.eqnGHx.sc-bqGGPW.fIHClq')
           }
         }, itemPath.get("g2a"));
       } catch (error) {
