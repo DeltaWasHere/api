@@ -36,6 +36,14 @@ let connection = mysql.createConnection({
   database: 'bzdpujn96e42tugmzkmi'
 });
 
+app.use(
+  '/api',
+  createProxyMiddleware({
+    target: 'http://api-production-827a.up.railway.app',
+    changeOrigin: true,
+  })
+);
+
 
 //#endregion
 
