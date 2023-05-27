@@ -1324,7 +1324,7 @@ function getGameTitle(gameId, platform) {
     request({ headers: headers, uri: url }, function (err, res, body) {
       console.log(body)
       let parsedResponse;
-      parsedResponse = JSON.parse(body);
+      parsedResponse = body;
 
       if (err || res.statusCode >= 400 || 'error' in parsedResponse || 'code' in parsedResponse || Object.keys(parsedResponse).length === 0) {
         //  console.log(body)
