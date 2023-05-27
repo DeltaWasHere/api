@@ -1111,9 +1111,7 @@ async function getPrices(platform, gameId) {
       try {
         console.log("Searching price for g2a");
         await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36');
-        await page.goto(pagesMap.get("g2a"), { "waitUntil": "load" });
-        await page.screenshot({ path: 'webos.jpg' });
-      
+        await page.goto(pagesMap.get("g2a"), { "waitUntil": "load" });      
         await page.waitForSelector(itemPath.get("g2a"));
 
         itemData[1] = await page.evaluate((itemPath) => {
