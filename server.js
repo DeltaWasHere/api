@@ -954,7 +954,7 @@ async function getGameAchievements(response, gameid, platform, language, userid)
   //get theacheivement tags if they exist
 
   const tags = await getAchievementTags(gameid);
-  console.log(tags);
+  console.log(itemData);
 
   //push into thge achievements tgas attribute the tags they had
   for (let i = 0; i < achievements.length; i++) {
