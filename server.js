@@ -1024,7 +1024,7 @@ async function getPrices(platform, gameId) {
   itemPath.set("g2a", ".indexes__StyledListMobile-wklrsw-101.kSqeJg.cuaXWm li");
   itemPath.set("cdKeys", ".ais-InfiniteHits-list li");
 
-  let browser = await (await puppeteer.launch({ headless: true })).createIncognitoBrowserContext();
+  let browser = await (await puppeteer.launch({ headless: true , args: ['--no-sandbox', '--disable-setuid-sandbox'], ignoreDefaultArgs: ['--disable-extensions']})).createIncognitoBrowserContext();
   let page = await browser.newPage();
   console.log("searching: price for: " + title);
 
