@@ -45,6 +45,14 @@ app.use(
   })
 );
 
+app.use(cors());
+
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 
 //#endregion
 
@@ -74,13 +82,7 @@ const storageThread = multer.diskStorage({
 
 const uploadThread = multer({ storage: storageThread });
 
-app.use(cors());
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
 
 app.use(function (err, req, res, next) {
   console.error(err.stack);
@@ -2517,8 +2519,3 @@ function readRelevantRoad(gameId) {
   });
 }
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
