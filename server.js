@@ -1154,7 +1154,7 @@ async function getPrices(platform, gameId) {
       }
     }
   }
-  browser.close();
+  await browser.close();
   return itemData;
 }
 
