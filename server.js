@@ -227,6 +227,7 @@ app.post('/trade/:transaction', bodyParser.json(), uploadTrade.single('validatio
 
         req.body.media = mediaPath;
         req.body.media = req.body.media.replace("\\", "\\\\");
+        status = await addTrade(req.body);
       }
 
 
