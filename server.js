@@ -1094,7 +1094,7 @@ async function getPrices(platform, gameId) {
       try {
         await page.waitForSelector(itemPath.get(platform));
         itemData[0] = await page.evaluate((itemPath) => {
-          let element = document.getElementsByClassName(itemPath)[0];
+          let element = document.querySelector(itemPath);
           return {
             link: element.getAttribute('href'),
             price: ((element.getElementsByClassName('col.search_price responsive_secondrow')[0]).textContent)
