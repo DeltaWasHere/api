@@ -377,7 +377,7 @@ function searchTrades(gameId) {
 }
 function getInterestedGames(interestedGameId1, interestedGameId2, interestedGameId3) {
   return new Promise((resolve, reject) => {
-    let sql2 = `SELECT * FROM GAMES WHERE gameId IN(${interestedGameId1 == "" ? "NULL" : interestedGameId1}, ${interestedGameId2 === "" ? "NULL" : interestedGameId2}, ${interestedGameId3 === "" ? "NULL" : interestedGameId3});`;
+    let sql2 = `SELECT * FROM games WHERE gameId IN(${interestedGameId1 == "" ? "NULL" : interestedGameId1}, ${interestedGameId2 === "" ? "NULL" : interestedGameId2}, ${interestedGameId3 === "" ? "NULL" : interestedGameId3});`;
     connection.query(sql2, (err, result1) => {
       if (err) { throw err; }
       console.log(sql2);
