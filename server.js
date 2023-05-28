@@ -40,6 +40,7 @@ let connection = mysql.createConnection({
   database: 'bzdpujn96e42tugmzkmi'
 });
 
+
 app.use(
   '/api',
   createProxyMiddleware({
