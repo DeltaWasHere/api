@@ -127,8 +127,8 @@ async function main() {
 
 
 const steam = new SteamAuth({
-  realm: "http://localhost:3000", // Site name displayed to users on logon
-  returnUrl: "http://localhost:3000/auth/steam/authenticate", // Your return route
+  realm: "https://api-production-827a.up.railway.app:3000", // Site name displayed to users on logon
+  returnUrl: "https://api-production-827a.up.railway.app/auth/steam/authenticate", // Your return route
   apiKey: "B180F37955BEBCD1CFA8DF8E32ECC03E" // Steam API key
 });
 
@@ -589,7 +589,7 @@ app.get("/auth/steam/authenticate", async (req, res) => {
     //Record user function
     //await addUser(userauthinfo)
     console.log(user.steamid);
-    res.redirect(`http://localhost:3006/auth/${user.steamid}`);
+    res.redirect(`https://web-app-a17c6.web.app//auth/${user.steamid}`);
 
     uploadUserStats(user.steamid, "steam");
 
