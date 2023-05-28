@@ -19,6 +19,7 @@ const { throws } = require('assert');
 const { response } = require('express');
 const { error } = require('console');
 const firebase = require('firebase/app');
+const admin = require('firebase-admin')
 const { getSorage, uploadBytes, ref, getStorage, getDownloadURL } = require('firebase/storage')
 //#region headers and BDConnection setup
 let xboxHeaders = {
@@ -69,7 +70,10 @@ const firebaseConfig = {
   universe_domain: process.env.UNIVERSE_DOMAIN
 }
 
-firebase.initializeApp(firebaseConfig);
+admin.initializeApp({
+  credential: admin.credential.cert(firebaseConfig),
+  storageBucket: "gs://bucket-22aff.appspot.com"
+});
 const storage = getStorage();
 
 //#endregion
