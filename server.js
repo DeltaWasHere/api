@@ -2263,7 +2263,7 @@ async function threads(response, userId, threadId, transaction, issue, title, co
         await uploadBytes(storageRef, file.buffer, metadata);
         const mediaPath = await getDownloadURL(storageRef);
         mediaURL = mediaPath;
-        mediaURL = mediaURL("\\", "\\\\");
+        mediaURL = mediaURL.replace("\\", "\\\\");
         threadId = await addThread(userId, issue, title, content, mediaURL);
       } else {
         mediaPath = null
