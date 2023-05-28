@@ -2143,7 +2143,7 @@ async function guides(response, gameId, userId, achievementId, transaction, cont
       if (guideId != null) {
         status = true
         request.post({
-          uri: "http://localhost:3002/guides",
+          uri: "https://discord-bot-production-4915.up.railway.app/guides",
           body: {
             "guideId": guideId,
             "userid": userId,
@@ -2274,7 +2274,7 @@ async function threads(response, userId, threadId, transaction, issue, title, co
         if (threadId != null) {
           status = true
           request.post({
-            uri: "http://localhost:3002/threads",
+            uri: "https://discord-bot-production-4915.up.railway.app/threads",
             body: {
               "threadId": threadId,
               "userid": userId,
@@ -2408,7 +2408,7 @@ async function road(res, transaction, gameId, userId, roadId, steps, spoilers, r
 
         status = true
         request.post({
-          uri: "http://localhost:3002/roads",
+          uri: "http://discord-bot-production-4915.up.railway.app/roads",
           body: {
             "roadId": roadId,
             "userid": userId,
