@@ -75,7 +75,7 @@ admin.initializeApp({
   credential: admin.credential.cert(firebaseConfig),
   storageBucket: "gs://bucket-22aff.appspot.com"
 });
-const storage = getStorage();
+const storage = admin.storage();
 
 //#endregion
 
