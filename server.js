@@ -19,7 +19,7 @@ const { throws } = require('assert');
 const { response } = require('express');
 const { error } = require('console');
 
-const {initializeApp} = require('firebase/app');
+const { initializeApp } = require('firebase/app');
 const { uploadBytes, ref, getDownloadURL, getStorage } = require('firebase/storage')
 //#region headers and BDConnection setup
 let xboxHeaders = {
@@ -197,13 +197,21 @@ app.post('/trade/:transaction', bodyParser.json(), uploadTrade.single('validatio
     case "addOffer":
       if (req.file === undefined) {
         req.body.media = "NULL";
+        status = await addOffer(req.body);
       } else {
-        req.body.media = req.file.path;
-        req.body.media = req.body.media.replace("\\", "\\\\");
-      }
-      req.body.destinedId = req.body.destinedId.replaceAll('"', '');
-      status = await addOffer(req.body);
+        const split = req.file.originalname.split(".");
+        const storageRef = ref(storage, req.body.userId.replace(/['"]+/g, '') + req.body.gameId.replace(/['"]+/g, '') + "-" + Date.now() + "." + split[split.length - 1]);
+        const metadata = {
+          contentType: 'video/mp4'
+        }
+        await uploadBytes(storageRef, req.file.buffer, metadata);
+        const mediaPath = await getDownloadURL(storageRef);
 
+
+        req.body.media = mediaPath;
+        req.body.media = req.body.media.replace("\\", "\\\\");
+        status = await addOffer(req.body);
+      }
       res.send(status);
       break;
 
@@ -814,38 +822,25 @@ app.get('/vote/:vote', function (req, res) {
   });
 });
 
-app.route('/thread/:transaction')
-  .get(function (req, res) {
-    console.log("a")
-    let transaction = req.params.transaction;
+app.post(bodyParser.json(), uploadThread.single('validation'), async function (req, res) {
+  console.log("a")
+  let transaction = req.params.transaction;
+  let userId = req.get('userId');
+  let threadId = req.get('threadId') || req.query.threadId;
+  let issue = req.body.issue;
+  let media = req.body.media || req.query.media;
+  let title = req.body.title;
+  let content = req.body.content;
+  let file;
+  if (req.file === undefined) {
+    file = "NULL";
+  } else {
+    file = req.file;
 
-    let threadId = req.query.threadId;
+  }
 
-    let media = req.query.media;
-
-
-    console.log("DOing: " + transaction);
-    threads(res, null, threadId, transaction, null, null, null, null, media);
-  })
-
-  .post(bodyParser.json(), uploadThread.single('validation'), function (req, res) {
-    console.log("a")
-    let transaction = req.params.transaction;
-    let userId = req.get('userId');
-    let threadId = req.get('threadId') || req.query.threadId;
-    let issue = req.body.issue;
-    let media = req.body.media || req.query.media;
-    let title = req.body.title;
-    let content = req.body.content;
-    let file;
-    if (req.file === undefined) {
-      file = "NULL";
-    } else {
-      file = req.file.path;
-    }
-
-    threads(res, userId, threadId, transaction, issue, title, content, file, media);
-  });
+  threads(res, userId, threadId, transaction, issue, title, content, file, media);
+});
 
 app.get('/tag/:transaction', function (req, res) {
   const gameId = req.get('gameId');
@@ -2260,8 +2255,16 @@ async function threads(response, userId, threadId, transaction, issue, title, co
   let status = false;
   switch (transaction) {
     case "create":
+      const split = file.originalname.split(".");
+      const storageRef = ref(storage, split[0] + "-" + Date.now() + "." + split[split.length - 1]);
+      const metadata = {};
+      await uploadBytes(storageRef, file.buffer, metadata);
+      const mediaPath = await getDownloadURL(storageRef);
 
-      threadId = await addThread(userId, issue, title, content, file);
+
+      mediaURL = mediaPath;
+      mediaURL = req.body.media.replace("\\", "\\\\");
+      threadId = await addThread(userId, issue, title, content, mediaURL);
       if (threadId != null) {
         status = true
         request.post({
@@ -2297,14 +2300,6 @@ async function threads(response, userId, threadId, transaction, issue, title, co
       threads = await readAllThreads(userId);
       console.log(threads);
       response.send(threads);
-      break;
-    case "getMedia":
-      console.log("sending the archieve located in: " + media);
-      var options = {
-        root: path.join(__dirname)
-      };
-      response.download(media, options);
-
       break;
 
   }
