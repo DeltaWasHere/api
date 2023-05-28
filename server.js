@@ -257,9 +257,9 @@ app.post('/trade/:transaction', bodyParser.json(), uploadTrade.single('validatio
 
     case "getMedia":
       console.log("Getting media to: " + req.body.media);
-      const ref = ref(storage, req.body.media);
+      const storageRef = ref(storage, req.body.media);
 
-      const fileUrl = await getDownloadURL(ref)
+      const fileUrl = await getDownloadURL(storageRef)
       res.redirect(fileUrl);
       break;
 
