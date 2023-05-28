@@ -2275,7 +2275,7 @@ async function threads(response, userId, threadId, transaction, issue, title, co
             "title": title,
             "issue": issue,
             "content": content,
-            "media": file
+            "media": mediaPath
           },
           json: true
         }, function (err, res, body) {
