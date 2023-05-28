@@ -828,10 +828,17 @@ app.post(bodyParser.json(), uploadThread.single('validation'), async function (r
   let transaction = req.params.transaction;
   let userId = req.get('userId');
   let threadId = req.get('threadId') || req.query.threadId;
-  let issue = req.body.issue || "";
-  let media = req.body.media || req.query.media;
-  let title = req.body.title || "";
-  let content = req.body.content||"";
+  if (req.body) {
+    let issue = req.body.issue || "";
+    let media = req.body.media || req.query.media;
+    let title = req.body.title || "";
+    let content = req.body.content || "";
+  }else{
+    let issue = null;
+    let media = null;
+    let title = null;
+    let content = null;
+  }
   let file;
   if (req.file === undefined) {
     file = "NULL";
