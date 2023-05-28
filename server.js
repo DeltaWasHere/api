@@ -1101,7 +1101,7 @@ async function getPrices(platform, gameId) {
           }
         }, itemPath.get(platform));
       } catch (error) {
-        console.log("Error getting the price in: " + steam);
+        console.log("Error getting the price in: " + steeram);
         itemData[0] = {
           price: "unknown",
           "link": pagesMap.get(platform)
