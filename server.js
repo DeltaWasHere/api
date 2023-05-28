@@ -822,16 +822,16 @@ app.get('/vote/:vote', function (req, res) {
   });
 });
 
-app.post("/thread/:transaction",bodyParser.json(), uploadThread.single('validation'), async function (req, res) {
+app.post("/thread/:transaction", bodyParser.json(), uploadThread.single('validation'), async function (req, res) {
   console.log("a")
   console.log(req.body);
   const transaction = req.params.transaction;
   const userId = req.get('userId');
   const threadId = req.get('threadId') || req.query.threadId;
-  const issue = req.body && req.body.issue ?req.body.issue : "";
+  const issue = req.body && req.body.issue ? req.body.issue : "";
   const media = null;
-  const title =req.body && req.body.title ? req.body.title : "";
-  const content =req.body && req.body.content ? req.body.content:"";
+  const title = req.body && req.body.title ? req.body.title : "";
+  const content = req.body && req.body.content ? req.body.content : "";
   let file;
   if (req.file === undefined) {
     file = "NULL";
@@ -2256,16 +2256,20 @@ async function threads(response, userId, threadId, transaction, issue, title, co
   let status = false;
   switch (transaction) {
     case "create":
-      const split = file.originalname.split(".");
-      const storageRef = ref(storage, split[0] + "-" + Date.now() + "." + split[split.length - 1]);
-      const metadata = {};
-      await uploadBytes(storageRef, file.buffer, metadata);
-      const mediaPath = await getDownloadURL(storageRef);
+      if (file != "NULL") {
+        const split = file.originalname.split(".");
+        const storageRef = ref(storage, split[0] + "-" + Date.now() + "." + split[split.length - 1]);
+        const metadata = {};
+        await uploadBytes(storageRef, file.buffer, metadata);
+        const mediaPath = await getDownloadURL(storageRef);
+        mediaURL = mediaPath;
+        mediaURL = req.body.media.replace("\\", "\\\\");
+        threadId = await addThread(userId, issue, title, content, mediaURL);
+      } else {
+        threadId = await addThread(userId, issue, title, content, mediaURL);
+      }
 
-
-      mediaURL = mediaPath;
-      mediaURL = req.body.media.replace("\\", "\\\\");
-      threadId = await addThread(userId, issue, title, content, mediaURL);
+     try{
       if (threadId != null) {
         status = true
         request.post({
@@ -2288,6 +2292,9 @@ async function threads(response, userId, threadId, transaction, issue, title, co
           }
         });
       }
+     }catch(error){
+      throw error;
+    }
       //send bot request to handle the thread by a mod
       break;
 
@@ -2353,7 +2360,7 @@ function readAllThreads(userId) {
       if (error) {
         resolve();
         throw error
-        
+
       } else {
         resolve(result);
       }
