@@ -1097,7 +1097,7 @@ async function getPrices(platform, gameId) {
           let element = document.getElementsByClassName(itemPath)[0];
           return {
             link: element.getAttribute('href'),
-            price: ((element.getElementsByClassName('col.search_price responsive_secondrow')[0]))
+            price: ((element.getElementsByClassName('col.search_price responsive_secondrow')[0]).textContent)
           }
         }, itemPath.get(platform));
       } catch (error) {
