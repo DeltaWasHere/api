@@ -824,6 +824,7 @@ app.get('/vote/:vote', function (req, res) {
 
 app.post(bodyParser.json(), uploadThread.single('validation'), async function (req, res) {
   console.log("a")
+  console.log(req.body);
   let transaction = req.params.transaction;
   let userId = req.get('userId');
   let threadId = req.get('threadId') || req.query.threadId;
