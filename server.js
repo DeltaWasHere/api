@@ -216,7 +216,7 @@ app.post('/trade/:transaction', bodyParser.json(), uploadTrade.single('validatio
         req.body.media = "NULL";
         status = await addTrade(req.body);
       } else {
-        const split = file.originalname.split(".");
+        const split = req.file.originalname.split(".");
         const storageRef = ref(storage, req.body.userId.replace(/['"]+/g, '') + req.body.gameId.replace(/['"]+/g, '') + "-" + Date.now() + "." + split[split.length - 1]);
         const metadata = {
           contentType: 'video/mp4'
