@@ -825,20 +825,13 @@ app.get('/vote/:vote', function (req, res) {
 app.post(bodyParser.json(), uploadThread.single('validation'), async function (req, res) {
   console.log("a")
   console.log(req.body);
-  let transaction = req.params.transaction;
-  let userId = req.get('userId');
-  let threadId = req.get('threadId') || req.query.threadId;
-  if (req.body!=undefined && req.body) {
-    let issue = req.body.issue || "";
-    let media = req.body.media || req.query.media;
-    let title = req.body.title || "";
-    let content = req.body.content || "";
-  }else{
-    let issue = null;
-    let media = null;
-    let title = null;
-    let content = null;
-  }
+  const transaction = req.params.transaction;
+  const userId = req.get('userId');
+  const threadId = req.get('threadId') || req.query.threadId;
+  const issue = req.body.issue || "";
+  const media = req.body.media || req.query.media;
+  const title = req.body.title || "";
+  const content = req.body.content||"";
   let file;
   if (req.file === undefined) {
     file = "NULL";
