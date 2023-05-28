@@ -257,10 +257,10 @@ app.post('/trade/:transaction', bodyParser.json(), uploadTrade.single('validatio
 
     case "getMedia":
       console.log("Getting media to: " + req.body.media);
-      var options = {
-        root: path.join(__dirname)
-      };
-      res.download(req.body.media, options);
+      const ref = ref(storage, req.body.media);
+
+      const fileUrl = await getDownloadURL(ref)
+      res.redirect(fileUrl);
       break;
 
     case "getKey":
