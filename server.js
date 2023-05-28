@@ -18,6 +18,8 @@ const { platform, userInfo } = require('os');
 const { throws } = require('assert');
 const { response } = require('express');
 const { error } = require('console');
+const firebase = require('firebase/app');
+const { getSorage, uploadBytes, ref, getStorage, getDownloadURL } = require('firebase/storage')
 //#region headers and BDConnection setup
 let xboxHeaders = {
   'x-xbl-contract-version': 2
@@ -53,6 +55,22 @@ app.use(function (req, res, next) {
   next();
 });
 
+const firebaseConfig = {
+  type: process.env.TYPE,
+  project_id: process.env.PROJECT_ID,
+  private_key_id: process.env.PRIVATE_KEY_ID,
+  private_key: process.env.PRIVATE_KEY,
+  client_email: process.env.CLIENT_EMAIL,
+  client_id: process.env.CLIENT_ID,
+  auth_uri: process.env.AUTH_URI,
+  token_uri: process.env.TOKEN_URI,
+  auth_provider_x509_cert_url: process.env.AUTH_PROVIDE_X509_CERT_URL,
+  client_x509_cert_url: process.env.CLIENT_X509_CERT_URL,
+  universe_domain: process.env.UNIVERSE_DOMAIN
+}
+
+firebase.initializeApp(firebaseConfig);
+const storage = getStorage();
 
 //#endregion
 
@@ -67,7 +85,7 @@ const storageTrade = multer.diskStorage({
   }
 })
 
-const uploadTrade = multer({ storage: storageTrade });
+const uploadTrade = multer({ storage: multer.memoryStorage() });
 
 const storageThread = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -80,7 +98,7 @@ const storageThread = multer.diskStorage({
   }
 })
 
-const uploadThread = multer({ storage: storageThread });
+const uploadThread = multer({ storage: multer.memoryStorage() });
 
 
 
@@ -194,14 +212,24 @@ app.post('/trade/:transaction', bodyParser.json(), uploadTrade.single('validatio
 
     case "addTrade":
       console.log(req.body);
-      if (req.file === undefined) {
+      if (req.file === undefined) { //no file to storage
         req.body.media = "NULL";
+        status = await addTrade(req.body);
       } else {
-        req.body.media = req.file.path;
+
+        const storageRef = ref(storage, req.body.userId.replace(/['"]+/g, '') + req.body.gameId.replace(/['"]+/g, '') + "-" + Date.now() + "." + split[split.length - 1]);
+        const metadata = {
+          contentType: 'video/mp4'
+        }
+        await uploadBytes(storageRef, req.file.buffer, metadata);
+        const mediaPath = await getDownloadURL(storageRef);
+
+
+        req.body.media = mediaPath;
         req.body.media = req.body.media.replace("\\", "\\\\");
       }
 
-      status = await addTrade(req.body);
+
       res.send(status);
       break;
 
@@ -1097,7 +1125,7 @@ async function getPrices(platform, gameId) {
           let element = document.querySelector(itemPath);
           return {
             link: element.getAttribute('href'),
-            price: ((element.getElementsByClassName('col search_price responsive_secondrow')[0]).textContent).replace( /[^0-9.,]/g, "")
+            price: ((element.getElementsByClassName('col search_price responsive_secondrow')[0]).textContent).replace(/[^0-9.,]/g, "")
           }
         }, itemPath.get(platform));
       } catch (error) {
@@ -1111,7 +1139,7 @@ async function getPrices(platform, gameId) {
       try {
         console.log("Searching price for g2a" + pagesMap.get("g2a"));
         await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36');
-        await page.goto(pagesMap.get("g2a"), { "waitUntil": "load" });      
+        await page.goto(pagesMap.get("g2a"), { "waitUntil": "load" });
         await page.waitForSelector(itemPath.get("g2a"));
 
         itemData[1] = await page.evaluate((itemPath) => {
@@ -1140,7 +1168,7 @@ async function getPrices(platform, gameId) {
 
         itemData[2] = await page.evaluate((itemPath) => {
           let element = document.querySelector(itemPath);
-          let price = (element.querySelector('.price-wrapper div span').textContent).replace( /[^0-9.,]/g, "");
+          let price = (element.querySelector('.price-wrapper div span').textContent).replace(/[^0-9.,]/g, "");
           return {
             link: element.querySelector('.result-thumbnail a').getAttribute("href"),
             price: price
