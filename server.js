@@ -828,10 +828,10 @@ app.post(bodyParser.json(), uploadThread.single('validation'), async function (r
   const transaction = req.params.transaction;
   const userId = req.get('userId');
   const threadId = req.get('threadId') || req.query.threadId;
-  const issue = req.body.issue || "";
-  const media = req.body.media || req.query.media;
-  const title = req.body.title || "";
-  const content = req.body.content||"";
+  const issue = req.body && req.body.issue ?req.body.issue : "";
+  const media = null;
+  const title =req.body && req.body.title ? req.body.title : "";
+  const content =req.body && req.body.content ? req.body.content:"";
   let file;
   if (req.file === undefined) {
     file = "NULL";
