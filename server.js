@@ -822,7 +822,7 @@ app.get('/vote/:vote', function (req, res) {
   });
 });
 
-app.post(bodyParser.json(), uploadThread.single('validation'), async function (req, res) {
+app.post("/thread/:transaction",bodyParser.json(), uploadThread.single('validation'), async function (req, res) {
   console.log("a")
   console.log(req.body);
   const transaction = req.params.transaction;
