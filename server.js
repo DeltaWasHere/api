@@ -2266,7 +2266,8 @@ async function threads(response, userId, threadId, transaction, issue, title, co
         mediaURL = req.body.media.replace("\\", "\\\\");
         threadId = await addThread(userId, issue, title, content, mediaURL);
       } else {
-        threadId = await addThread(userId, issue, title, content, mediaURL);
+
+        threadId = await addThread(userId, issue, title, content, null);
       }
 
      try{
