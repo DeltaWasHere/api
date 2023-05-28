@@ -2270,7 +2270,6 @@ async function threads(response, userId, threadId, transaction, issue, title, co
         threadId = await addThread(userId, issue, title, content, null);
       }
 
-      
      try{
       if (threadId != null) {
         status = true
