@@ -18,9 +18,8 @@ const { platform, userInfo } = require('os');
 const { throws } = require('assert');
 const { response } = require('express');
 const { error } = require('console');
-const firebase = require('firebase/app');
 const admin = require('firebase-admin')
-const { getSorage, uploadBytes, ref, getStorage, getDownloadURL } = require('firebase/storage')
+const {  uploadBytes, ref, getStorage, getDownloadURL } = require('firebase/storage')
 //#region headers and BDConnection setup
 let xboxHeaders = {
   'x-xbl-contract-version': 2
