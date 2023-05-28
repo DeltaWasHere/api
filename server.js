@@ -127,7 +127,7 @@ async function main() {
 
 
 const steam = new SteamAuth({
-  realm: "https://api-production-827a.up.railway.app:3000", // Site name displayed to users on logon
+  realm: "https://api-production-827a.up.railway.app", // Site name displayed to users on logon
   returnUrl: "https://api-production-827a.up.railway.app/auth/steam/authenticate", // Your return route
   apiKey: "B180F37955BEBCD1CFA8DF8E32ECC03E" // Steam API key
 });
