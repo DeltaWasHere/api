@@ -2263,39 +2263,39 @@ async function threads(response, userId, threadId, transaction, issue, title, co
         await uploadBytes(storageRef, file.buffer, metadata);
         const mediaPath = await getDownloadURL(storageRef);
         mediaURL = mediaPath;
-        mediaURL = req.body.media.replace("\\", "\\\\");
+        mediaURL = mediaURL("\\", "\\\\");
         threadId = await addThread(userId, issue, title, content, mediaURL);
       } else {
-mediaPath = null
+        mediaPath = null
         threadId = await addThread(userId, issue, title, content, null);
       }
 
-     try{
-      if (threadId != null) {
-        status = true
-        request.post({
-          uri: "http://localhost:3002/threads",
-          body: {
-            "threadId": threadId,
-            "userid": userId,
-            "title": title,
-            "issue": issue,
-            "content": content,
-            "media": mediaPath
-          },
-          json: true
-        }, function (err, res, body) {
-          if (err) throw err;
-          if (body.status == 1) {
-            console.log("thread sended sended");
-          } else {
-            console.log("soemthign went wrong !!!")
-          }
-        });
+      try {
+        if (threadId != null) {
+          status = true
+          request.post({
+            uri: "http://localhost:3002/threads",
+            body: {
+              "threadId": threadId,
+              "userid": userId,
+              "title": title,
+              "issue": issue,
+              "content": content,
+              "media": mediaPath
+            },
+            json: true
+          }, function (err, res, body) {
+            if (err) throw err;
+            if (body.status == 1) {
+              console.log("thread sended sended");
+            } else {
+              console.log("soemthign went wrong !!!")
+            }
+          });
+        }
+      } catch (error) {
+        console.log(error);
       }
-     }catch(error){
-      console.log(error);
-    }
       //send bot request to handle the thread by a mod
       break;
 
