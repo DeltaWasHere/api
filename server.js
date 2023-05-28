@@ -1097,7 +1097,7 @@ async function getPrices(platform, gameId) {
           let element = document.querySelector(itemPath);
           return {
             link: element.getAttribute('href'),
-            price: ((element.getElementsByClassName('col search_price responsive_secondrow')[0]).textContent)
+            price: ((element.getElementsByClassName('col search_price responsive_secondrow')[0]).textContent).replace(/[^0-9.]/, "")
           }
         }, itemPath.get(platform));
       } catch (error) {
@@ -1140,7 +1140,7 @@ async function getPrices(platform, gameId) {
 
         itemData[2] = await page.evaluate((itemPath) => {
           let element = document.querySelector(itemPath);
-          let price = element.querySelector('.price-wrapper div span').textContent;
+          let price = (element.querySelector('.price-wrapper div span').textContent).replace(/[^0-9.]/, "");
           return {
             link: element.querySelector('.result-thumbnail a').getAttribute("href"),
             price: price
