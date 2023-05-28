@@ -18,8 +18,8 @@ const { platform, userInfo } = require('os');
 const { throws } = require('assert');
 const { response } = require('express');
 const { error } = require('console');
-const admin = require('firebase-admin')
-const firebase = require('firebase');
+
+const {initializeApp} = require('firebase/app');
 const { uploadBytes, ref, getDownloadURL, getStorage } = require('firebase/storage')
 //#region headers and BDConnection setup
 let xboxHeaders = {
@@ -66,7 +66,7 @@ const firebaseConfig = {
   appId: process.env.APPID
 }
 
-firebase.initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 const storage = getStorage();
 
 //#endregion
