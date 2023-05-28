@@ -2351,8 +2351,9 @@ function readAllThreads(userId) {
     console.log(sql);
     connection.query(sql, (error, result) => {
       if (error) {
-        console.log(error);
         resolve();
+        throw error
+        
       } else {
         resolve(result);
       }
