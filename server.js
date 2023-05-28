@@ -2294,7 +2294,7 @@ async function threads(response, userId, threadId, transaction, issue, title, co
         });
       }
      }catch(error){
-      throw error;
+      console.log(erorr);
     }
       //send bot request to handle the thread by a mod
       break;
