@@ -365,7 +365,7 @@ function getOffers(tradeId) {
 
 function searchTrades(gameId) {
   return new Promise((resolve, reject) => {
-    let sql = `SELECT trade.tradeId, trade.acceptedId, users.avatar, users.tradeRate, trade.tradeId, users.name as userName, trade.restriction, trade.gameId, trade.date, trade.interestedgameId1, trade.interestedgameId2, trade.interestedgameId3, trade.media, games.front, games.name FROM trade JOIN users ON users.userId = trade.userId JOIN games ON games.gameId = trade.gameId where trade.gameId = ${gameId} AND public = 1;`;
+    let sql = `SELECT trade.tradeId, trade.acceptedId, users.avatar, users.tradeRate, users.userId, trade.tradeId, users.name as userName, trade.restriction, trade.gameId, trade.date, trade.interestedgameId1, trade.interestedgameId2, trade.interestedgameId3, trade.media, games.front, games.name FROM trade JOIN users ON users.userId = trade.userId JOIN games ON games.gameId = trade.gameId where trade.gameId = ${gameId} AND public = 1;`;
     connection.query(sql, (err, result) => {
       if (err) { throw err; }
 
