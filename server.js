@@ -828,7 +828,7 @@ app.post(bodyParser.json(), uploadThread.single('validation'), async function (r
   let transaction = req.params.transaction;
   let userId = req.get('userId');
   let threadId = req.get('threadId') || req.query.threadId;
-  if (req.body) {
+  if (req.body!=undefined && req.body) {
     let issue = req.body.issue || "";
     let media = req.body.media || req.query.media;
     let title = req.body.title || "";
