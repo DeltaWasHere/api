@@ -1097,7 +1097,7 @@ async function getPrices(platform, gameId) {
           let element = document.querySelector(itemPath);
           return {
             link: element.getAttribute('href'),
-            price: ((element.getElementsByClassName('col search_price responsive_secondrow')[0]).textContent).replace(/[^0-9.]/, "")
+            price: ((element.getElementsByClassName('col search_price responsive_secondrow')[0]).textContent).replace( /[^0-9.,]/g, "")
           }
         }, itemPath.get(platform));
       } catch (error) {
@@ -1119,7 +1119,7 @@ async function getPrices(platform, gameId) {
           let element = document.querySelector(itemPath);
           return {
             link: "https://www.g2a.com" + element.querySelector('.sc-iqAclL.sc-dIsUp.dJFpVb.eHDAgC.sc-kHWWYL.kfrcst a').getAttribute("href"),
-            price: (element.querySelector('.sc-iqAclL.sc-crzoAE.dJFpVb.eqnGHx.sc-bqGGPW.fIHClq').textContent).replace(/[^0-9.]/, "")
+            price: (element.querySelector('.sc-iqAclL.sc-crzoAE.dJFpVb.eqnGHx.sc-bqGGPW.fIHClq').textContent).replace(/[^0-9.,]/g, "")
           }
         }, itemPath.get("g2a"));
       } catch (error) {
@@ -1140,7 +1140,7 @@ async function getPrices(platform, gameId) {
 
         itemData[2] = await page.evaluate((itemPath) => {
           let element = document.querySelector(itemPath);
-          let price = (element.querySelector('.price-wrapper div span').textContent).replace(/[^0-9.]/, "");
+          let price = (element.querySelector('.price-wrapper div span').textContent).replace( /[^0-9.,]/g, "");
           return {
             link: element.querySelector('.result-thumbnail a').getAttribute("href"),
             price: price
