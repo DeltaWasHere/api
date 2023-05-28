@@ -2290,6 +2290,7 @@ async function threads(response, userId, threadId, transaction, issue, title, co
               console.log("thread sended sended");
             } else {
               console.log("soemthign went wrong !!!")
+              console.log(body);
             }
           });
         }
