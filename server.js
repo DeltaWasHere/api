@@ -2560,5 +2560,5 @@ app.get("/price/:title", async (req, res) => {
   const title = req.params.title;
    ("Getting price for : "+ title)
   const platform = req.get('platform')
-  const prices = getPrices(title)
+  const prices = getPrices(platform,null ,title)
 })
