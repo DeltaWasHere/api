@@ -1028,8 +1028,10 @@ app.get('/POOOOOWEEEEEEER/:gameId', async function (req, res) {
 });
 
 
-async function getPrices(platform, gameId) {
-  const title = await getStoredGameTitle(gameId);
+async function getPrices(platform, gameId, title) {
+  if(title==undefined){
+    title = await getStoredGameTitle(gameId);
+  }
   let itemData = [];
   //#region scrap page
 
@@ -2552,3 +2554,7 @@ function readRelevantRoad(gameId) {
   });
 }
 
+app.get("/price/:title", async (req, res) => {
+  const title = req.params.title;
+  const prices = getPrices(title)
+})
