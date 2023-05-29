@@ -1030,7 +1030,7 @@ app.get('/POOOOOWEEEEEEER/:gameId', async function (req, res) {
 
 
 async function getPrices(platform, gameId, title) {
-  if(title==undefined){
+  if (title == undefined) {
     title = await getStoredGameTitle(gameId);
   }
   let itemData = [];
@@ -2556,9 +2556,10 @@ function readRelevantRoad(gameId) {
 }
 
 app.get("/price/:title", async (req, res) => {
- 
+
   const title = req.params.title;
-   ("Getting price for : "+ title)
+  ("Getting price for : " + title)
   const platform = req.get('platform')
-  const prices = getPrices(platform,null ,title)
+  const prices = getPrices(platform, null, title)
+  res.send(prices);
 })
