@@ -2412,7 +2412,7 @@ async function road(res, transaction, gameId, userId, roadId, steps, spoilers, r
 
         status = true
         request.post({
-          uri: "http://discord-bot-production-4915.up.railway.app/roads",
+          uri: "https://discord-bot-production-4915.up.railway.app/roads",
           body: {
             "roadId": roadId,
             "userid": userId,
