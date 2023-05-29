@@ -918,6 +918,7 @@ app.post('/road/:transaction', bodyParser.json(), function (req, res) {
   spoilers = (spoilers == "true") ? true : false;
   const steps = req.body.roadSteps;
   console.log(req.body);
+  console.log(userId);
   road(res, transaction, gameId, userId, roadId, steps, spoilers, rate);
 
 });
