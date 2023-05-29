@@ -2423,7 +2423,7 @@ async function road(res, transaction, gameId, userId, roadId, steps, spoilers, r
           json: true
         }, function (err, res, body) {
           if (err) throw err;
-          
+
           if (body.status == 1) {
             console.log("road sended");
           } else {
@@ -2452,6 +2452,10 @@ async function road(res, transaction, gameId, userId, roadId, steps, spoilers, r
       break;
     case "publish":
       status = await publishRoad(roadId);
+      break;
+    case "readRelevant":
+      let roadsRelevant = [];
+      roadsRelevant = await readRelevantRoads(userId);
       break;
   }
   try {
@@ -2542,16 +2546,17 @@ function readAllRoads(gameId) {
   });
 }
 
-function readRelevantRoad(gameId) {
+function readRelevantRoads(userId) {
   return new Promise((resolve, reject) => {
-    let sql = 'select r*, g.name, g.cover from road r join game g on r.gameId = g.gameIdwhere t.gameId = "' + gameId + '" ordered by rate DESC LIMIT 1';
-    connection.query(sql, (error, result) => {
-      if (error) {
-        console.log(error);
-        resolve(result);
-      } else {
-        resolve();
-      }
+    const sql1 = `select gameId from usergames where userId = ${userId}`;
+
+    connection.query(sql1, (error, result) => {
+      if (error) throw error;
+      const sql2 = `select r*, g.name, g.cover from road r join game g on r.gameId = g.gameId where t.gameId in (?) ordered by rate DESC LIMIT 1`;
+      connection.query(sql2, [result], (error, result2) => {
+        if (error) throw error;
+        resolve(result2);
+      });
     });
   });
 }
