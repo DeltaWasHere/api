@@ -2549,9 +2549,9 @@ function readAllRoads(gameId) {
 
 function readRelevantRoads(userId) {
   return new Promise((resolve, reject) => {
-    const sql1 = `select gameId from usersgame where userId = ${userId}`;
+    const sql1 = `select gameId from usersgame where userId = ?`;
 
-    connection.query(sql1, (error, result) => {
+    connection.query(sql1, [userId],(error, result) => {
       if (error) throw error;
       const sql2 = `select r*, g.name, g.cover from road r join game g on r.gameId = g.gameId where t.gameId in (?) ordered by rate DESC LIMIT 1`;
       connection.query(sql2, [result], (error, result2) => {
