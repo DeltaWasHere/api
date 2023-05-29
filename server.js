@@ -2423,6 +2423,7 @@ async function road(res, transaction, gameId, userId, roadId, steps, spoilers, r
           json: true
         }, function (err, res, body) {
           if (err) throw err;
+          body = JSON.parse(body);
           if (body.status == 1) {
             console.log("road sended");
           } else {
