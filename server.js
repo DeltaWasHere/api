@@ -2560,6 +2560,6 @@ app.get("/price/:title", async (req, res) => {
   const title = req.params.title;
   ("Getting price for : " + title)
   const platform = req.get('platform')
-  const prices = getPrices(platform, null, title)
+  const prices = await getPrices(platform, null, title)
   res.send(prices);
 })
