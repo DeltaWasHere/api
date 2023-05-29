@@ -2557,7 +2557,7 @@ function readRelevantRoads(userId) {
       if (error) throw error;
       console.log(result);
       const aux = result.map((value)=>value.gameId);
-      const sql2 = `select r.*, g.name, g.cover from road r join games g on r.gameId = g.gameId where r.gameId in (?) GROUP BY r.gameId ORDER BY r.rate DESC LIMIT 1;`;
+      const sql2 = `select r.*, g.name, g.front from road r join games g on r.gameId = g.gameId where r.gameId in (?) GROUP BY r.gameId ORDER BY r.rate DESC LIMIT 1;`;
       connection.query(sql2, [aux], (error, result2) => {
         if (error) throw error;
         resolve(result2);
