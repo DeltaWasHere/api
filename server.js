@@ -2456,6 +2456,7 @@ async function road(res, transaction, gameId, userId, roadId, steps, spoilers, r
     case "readRelevant":
       let roadsRelevant = [];
       roadsRelevant = await readRelevantRoads(userId);
+      res.send(roadsRelevant);
       break;
   }
   try {
@@ -2548,7 +2549,7 @@ function readAllRoads(gameId) {
 
 function readRelevantRoads(userId) {
   return new Promise((resolve, reject) => {
-    const sql1 = `select gameId from usergames where userId = ${userId}`;
+    const sql1 = `select gameId from usersgame where userId = ${userId}`;
 
     connection.query(sql1, (error, result) => {
       if (error) throw error;
