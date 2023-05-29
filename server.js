@@ -37,7 +37,8 @@ let connection = mysql.createConnection({
   user: 'uyn2j8jm7hyaezaf',
   port: "20492",
   password: 'JLimZouexH0P10Kcalk',
-  database: 'bzdpujn96e42tugmzkmi'
+  database: 'bzdpujn96e42tugmzkmi',
+  sql_mode: ''
 });
 
 
