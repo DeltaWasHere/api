@@ -2556,6 +2556,7 @@ function readRelevantRoad(gameId) {
 }
 
 app.get("/price/:title", async (req, res) => {
+  ("Getting price for : "+ title)
   const title = req.params.title;
   const platform = req.get('platform')
   const prices = getPrices(title)
