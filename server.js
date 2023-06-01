@@ -660,6 +660,7 @@ app.get("/xbox/auth/grant", async (req, res) => {
     if (error) throw error;
     let userId = body.xuid;
     let avatar = body.avatar;
+    console.log(avatar);
     for (let i = 0; i < avatar.length; i++) {
       if (avatar[i] == "&") {
         avatar = avatar.substring(0, i);
