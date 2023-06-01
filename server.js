@@ -1671,17 +1671,17 @@ function getUserInfo(userid, platform) {
       }, function (err, res, body) {
         if (err) throw err;
         parseResponse = body;
-
-        for (let i = 0; i < userInfo['avatar'].length; i++) {
-          if (userInfo['avatar'] == "&") {
-            userInfo['avatar'] = avatar.substring(0, i);
+let aux = parseResponse.profileUsers[0].settings[1].value;
+        for (let i = 0; i < aux.length; i++) {
+          if (aux == "&") {
+            aux = aux.substring(0, i);
             break;
           }
         }
-        userInfo['avatar'] = userInfo['avatar']+"&format=png"
+        aux = aux+"format=png"
         userInfo['userId'] = userid;
         userInfo['name'] = parseResponse.profileUsers[0].settings[0].value;
-        userInfo['avatar'] = parseResponse.profileUsers[0].settings[1].value;
+        userInfo['avatar'] = aux;
         userInfo['score'] = 0;
         userInfo['platform'] = platform;
 
