@@ -1678,7 +1678,7 @@ let aux = parseResponse.profileUsers[0].settings[1].value;
             break;
           }
         }
-        aux = aux+"format=png"
+        aux = aux+"&format=png"
         userInfo['userId'] = userid;
         userInfo['name'] = parseResponse.profileUsers[0].settings[0].value;
         userInfo['avatar'] = aux;
