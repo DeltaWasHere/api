@@ -624,7 +624,7 @@ app.get("/auth/steam/authenticate", async (req, res) => {
     //Record user function
     //await addUser(userauthinfo)
     console.log(user.steamid);
-    res.redirect(`https://web-app-a17c6.web.app//auth/${user.steamid}`);
+    res.redirect(`https://web-app-a17c6.web.app/auth/${user.steamid}`);
 
     uploadUserStats(user.steamid, "steam");
 
@@ -668,11 +668,9 @@ app.get("/xbox/auth/grant", async (req, res) => {
     }
     avatar = avatar + "&format=png"
     let name = body.gamertag;
-    res.send(json.stringify({
-      userId: userId,
-      name: name,
-      avatar: avatar
-    }));
+    res.redirect(`https://web-app-a17c6.web.app/auth/${userid}`);
+
+  
     uploadUserStats(userId, "xbox");
   });
 
