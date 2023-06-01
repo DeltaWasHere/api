@@ -1672,6 +1672,13 @@ function getUserInfo(userid, platform) {
         if (err) throw err;
         parseResponse = body;
 
+        for (let i = 0; i < userInfo['avatar'].length; i++) {
+          if (userInfo['avatar'] == "&") {
+            userInfo['avatar'] = avatar.substring(0, i);
+            break;
+          }
+        }
+        userInfo['avatar'] = userInfo['avatar']+"&format=png"
         userInfo['userId'] = userid;
         userInfo['name'] = parseResponse.profileUsers[0].settings[0].value;
         userInfo['avatar'] = parseResponse.profileUsers[0].settings[1].value;
