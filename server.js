@@ -2214,7 +2214,7 @@ function updateGuide(guideId, content) {
 
 function readGuide(gameId, achievementId) {
   return new Promise((resolve, reject) => {
-    let sql = 'select achievementGuides.guideId, achievementGuides.gameId, achievementGuides.content, achievementGuides.votes, achievementGuides.date, users.name, users.avatar, users.userId from achievementGuides INNER JOIN users ON achievementGuides.userId = users.userId AND  achievementGuides.gameId = "' + gameId + '"   AND achievementGuides.achievementId = "' + achievementId + '" AND achievementGuides.public = 1;';
+    let sql = 'select achievementguides.guideId, achievementguides.gameId, achievementguides.content, achievementguides.votes, achievementGuides.date, users.name, users.avatar, users.userId from achievementguides INNER JOIN users ON achievementguides.userId = users.userId AND  achievementguides.gameId = "' + gameId + '"   AND achievementguides.achievementId = "' + achievementId + '" AND achievementguides.public = 1;';
     console.log(sql);
     connection.query(sql, (error, result) => {
       if (error) {
