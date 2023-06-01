@@ -2089,7 +2089,7 @@ function getOwnedGames(userid, platform) {
             let parsedResponse = body;
 
             for (let i = 0; i < appsarray.length; i++) {
-              appsarray[i].timeplayed = parseFloat(parseInt(parsedResponse.statlistscollection[0].stats[i].value)).toFixed(1);
+              appsarray[i].timeplayed = (parseFloat(parseInt(parsedResponse.statlistscollection[0].stats[i].value)).toFixed(1))/60;
             }
 
             resolve(appsarray);
