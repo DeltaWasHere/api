@@ -32,13 +32,14 @@ let xblHeaders = {
   'X-Authorization': 'kos4gk0cwgowc84o8c88cg8sgs8c8gsk0oc'
 }
 let authorization, myNpsso, accesCode;
-let connection = mysql.createConnection({
+let connection = mysql.createPool({
   host: 'bzdpujn96e42tugmzkmi-mysql.services.clever-cloud.com',
   user: 'uyn2j8jm7hyaezaf',
   port: "20492",
   password: 'JLimZouexH0P10Kcalk',
   database: 'bzdpujn96e42tugmzkmi',
-  sql_mode: ''
+  sql_mode: '',
+  connectionLimit: 10
 });
 
 
