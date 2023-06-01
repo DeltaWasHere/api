@@ -531,7 +531,7 @@ app.get("/profile/:transaction", async function (req, res) {
       });
       break;
     case "guidesWrited":
-      sql = 'select achievementGuides.guideId, achievementGuides.gameId, achievementGuides.content, achievementGuides.votes, achievementGuides.date, users.name, users.avatar, users.userId from achievementGuides INNER JOIN users ON achievementGuides.userId = users.userId AND   achievementGuides.userId = "' + userId + '" AND achievementGuides.public = 1;'
+      sql = 'select achievementguides.guideId, achievementguides.gameId, achievementguides.content, achievementguides.votes, achievementguides.date, users.name, users.avatar, users.userId from achievementguides INNER JOIN users ON achievementguides.userId = users.userId AND   achievementguides.userId = "' + userId + '" AND achievementguides.public = 1;'
       connection.query(sql, (err, response) => {
         if (err) throw err;
         res.send(response);
@@ -2185,7 +2185,7 @@ async function guides(response, gameId, userId, achievementId, transaction, cont
 
 function addGuide(gameId, userId, achievementId, content) {
   return new Promise((resolve, reject) => {
-    let sql = 'insert into achievementGuides (gameId, userId, achievementId, content, date) VALUES (?) ON DUPLICATE KEY update content = VALUES(content), date = VALUES(date), public=0 ';
+    let sql = 'insert into achievementguides (gameId, userId, achievementId, content, date) VALUES (?) ON DUPLICATE KEY update content = VALUES(content), date = VALUES(date), public=0 ';
     let array = [gameId, userId, achievementId, content, Math.floor(Date.now() / 1000)];
     connection.query(sql, [array], (error, result) => {
       if (error) {
@@ -2200,7 +2200,7 @@ function addGuide(gameId, userId, achievementId, content) {
 
 function updateGuide(guideId, content) {
   return new Promise((resolve, reject) => {
-    let sql = 'update achievementGuides set content = "' + content + '", public=0 , date = ' + Math.floor(Date.now() / 1000) + ' where guideId = ' + guideId;
+    let sql = 'update achievementguides set content = "' + content + '", public=0 , date = ' + Math.floor(Date.now() / 1000) + ' where guideId = ' + guideId;
     connection.query(sql, (error, result) => {
       if (error) {
         console.log(error);
@@ -2214,7 +2214,7 @@ function updateGuide(guideId, content) {
 
 function readGuide(gameId, achievementId) {
   return new Promise((resolve, reject) => {
-    let sql = 'select achievementguides.guideId, achievementguides.gameId, achievementguides.content, achievementguides.votes, achievementGuides.date, users.name, users.avatar, users.userId from achievementguides INNER JOIN users ON achievementguides.userId = users.userId AND  achievementguides.gameId = "' + gameId + '"   AND achievementguides.achievementId = "' + achievementId + '" AND achievementguides.public = 1;';
+    let sql = 'select achievementguides.guideId, achievementguides.gameId, achievementguides.content, achievementguides.votes, achievementguides.date, users.name, users.avatar, users.userId from achievementguides INNER JOIN users ON achievementguides.userId = users.userId AND  achievementguides.gameId = "' + gameId + '"   AND achievementguides.achievementId = "' + achievementId + '" AND achievementguides.public = 1;';
     console.log(sql);
     connection.query(sql, (error, result) => {
       if (error) {
@@ -2229,7 +2229,7 @@ function readGuide(gameId, achievementId) {
 
 function deleteGuide(guideId) {
   return new Promise((resolve, reject) => {
-    let sql = 'delete from achievementGuides where guideId=' + guideId;
+    let sql = 'delete from achievementguides where guideId=' + guideId;
     connection.query(sql, (error, result) => {
       if (error) {
         resolve(false);
@@ -2242,7 +2242,7 @@ function deleteGuide(guideId) {
 
 function publishGuide(guideId) {
   return new Promise((resolve, reject) => {
-    let sql = 'update achievementGuides set public = 1 where guideId=' + guideId;
+    let sql = 'update achievementguides set public = 1 where guideId=' + guideId;
     connection.query(sql, (error, result) => {
       if (error) {
         resolve(false);
