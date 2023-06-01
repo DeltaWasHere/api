@@ -32,14 +32,13 @@ let xblHeaders = {
   'X-Authorization': 'kos4gk0cwgowc84o8c88cg8sgs8c8gsk0oc'
 }
 let authorization, myNpsso, accesCode;
-let connection = mysql.createPool({
+let connection = mysql.createConnection({
   host: 'bzdpujn96e42tugmzkmi-mysql.services.clever-cloud.com',
   user: 'uyn2j8jm7hyaezaf',
   port: "20492",
   password: 'JLimZouexH0P10Kcalk',
   database: 'bzdpujn96e42tugmzkmi',
-  sql_mode: '',
-  connectionLimit: 10
+  sql_mode: ''
 });
 
 
@@ -107,7 +106,10 @@ app.use(function (err, req, res, next) {
   res.status(500);
   res.send('500 - Server Error');
 });
-
+connection.connect(error => {
+  if (error) throw error;
+  console.log('Conected!');
+})
 app.set('port', 3000);
 
 //function to get the apikeys that needs to be shceduled every 50 minutes aprox
