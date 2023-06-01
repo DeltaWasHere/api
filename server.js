@@ -1673,7 +1673,7 @@ function getUserInfo(userid, platform) {
         parseResponse = body;
 let aux = parseResponse.profileUsers[0].settings[1].value;
         for (let i = 0; i < aux.length; i++) {
-          if (aux == "&") {
+          if (aux[i] == "&") {
             aux = aux.substring(0, i);
             break;
           }
