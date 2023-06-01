@@ -107,10 +107,7 @@ app.use(function (err, req, res, next) {
   res.status(500);
   res.send('500 - Server Error');
 });
-connection.connect(error => {
-  if (error) throw error;
-  console.log('Conected!');
-})
+
 app.set('port', 3000);
 
 //function to get the apikeys that needs to be shceduled every 50 minutes aprox
