@@ -668,7 +668,7 @@ app.get("/xbox/auth/grant", async (req, res) => {
     }
     avatar = avatar + "&format=png"
     let name = body.gamertag;
-    res.redirect(`https://web-app-a17c6.web.app/auth/${userid}`);
+    res.redirect(`https://web-app-a17c6.web.app/auth/${userId}`);
 
   
     uploadUserStats(userId, "xbox");
