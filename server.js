@@ -1,6 +1,7 @@
 let express = require('express');
 require('dotenv').config();
 let fs = require('fs');
+const schedule = require('node-schedule');
 const app = express();
 let request = require('request');
 let mysql = require('mysql');
@@ -671,7 +672,7 @@ app.get("/xbox/auth/grant", async (req, res) => {
     let name = body.gamertag;
     res.redirect(`https://web-app-a17c6.web.app/auth/${userId}`);
 
-  
+
     uploadUserStats(userId, "xbox");
   });
 
@@ -1671,14 +1672,14 @@ function getUserInfo(userid, platform) {
       }, function (err, res, body) {
         if (err) throw err;
         parseResponse = body;
-let aux = parseResponse.profileUsers[0].settings[1].value;
+        let aux = parseResponse.profileUsers[0].settings[1].value;
         for (let i = 0; i < aux.length; i++) {
           if (aux[i] == "&") {
             aux = aux.substring(0, i);
             break;
           }
         }
-        aux = aux+"&format=png"
+        aux = aux + "&format=png"
         userInfo['userId'] = userid;
         userInfo['name'] = parseResponse.profileUsers[0].settings[0].value;
         userInfo['avatar'] = aux;
@@ -1724,6 +1725,7 @@ let aux = parseResponse.profileUsers[0].settings[1].value;
 async function uploadUserStats(userid, platform) {
 
   //tenemso que sacar el avatarname y iod del usuario de otra manera solo lo añadimos
+  let user
   let userInfo = await getUserInfo(userid, platform);
 
 
@@ -2097,7 +2099,7 @@ function getOwnedGames(userid, platform) {
             let parsedResponse = body;
 
             for (let i = 0; i < appsarray.length; i++) {
-              appsarray[i].timeplayed = (parseFloat(parseInt(parsedResponse.statlistscollection[0].stats[i].value)).toFixed(1))/60;
+              appsarray[i].timeplayed = (parseFloat(parseInt(parsedResponse.statlistscollection[0].stats[i].value)).toFixed(1)) / 60;
             }
 
             resolve(appsarray);
@@ -2559,10 +2561,10 @@ function readRelevantRoads(userId) {
     console.log(userId);
     const sql1 = `select gameId from usersgame where userId = ? and completedDate is null`;
 
-    connection.query(sql1, [userId],(error, result) => {
+    connection.query(sql1, [userId], (error, result) => {
       if (error) throw error;
       console.log(result);
-      const aux = result.map((value)=>value.gameId);
+      const aux = result.map((value) => value.gameId);
       const sql2 = `select r.*, g.name, g.front from road r join games g on r.gameId = g.gameId where r.gameId in (?) GROUP BY r.gameId ORDER BY r.rate DESC LIMIT 1`;
       const query = connection.format(sql2, [aux]);
       console.log(query); // Print the formatted SQL query
@@ -2581,4 +2583,74 @@ app.get("/price/:title", async (req, res) => {
   const platform = req.get('platform')
   const prices = await getPrices(platform, null, title)
   res.send(prices);
-})
+});
+
+app.get("/ban/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  const sql = `update users set ban = 7 where userId =${userId} `
+  connection.query(sql, (err, result) => {
+    if (err) throw err;
+  });
+});
+
+
+const job = schedule.scheduleJob('01 00 00 * * *', async (req, res) => {
+  //1 get thte users
+  let users = await getUsers();
+  //2 check the ban clocks 
+
+  let ban = []; //people to ban
+  let banAwait = []; //people to reduce one of their clock
+  for (let i = 0; i < users.length; i++) {
+    if (users[i] != null) {
+      if (((users[i].ban) - 1) == 0) {
+        ban.push(users[i].userId)
+      } else {
+        users[i].ban = users[i].ban - 1;
+        banAwait.push(users[i])
+      }
+    }
+  }
+  //3 ban the users needed cascade fk should delete their things too
+  await banUsers(ban);
+  await moveDeathClock(banAwait);
+
+  //4 upload temainign users stats
+  for (let i = 0; i < users.length; i++) {
+    uploadUserStats(users[i].userId, users[i].platform);
+  }
+  //5 recalculate the global scores
+});
+
+function getUsers() {
+  return new Promise((resolve) => {
+    const sql = "select * from users"
+    connection.query(sql, (err, res) => {
+      if (err) throw err;
+      resolve(res);
+    })
+  })
+}
+function banUsers(banIds) {
+  return new Promise((resolve) => {
+    const sql = "delete from users where userId IN  (?)"
+    connection.query(sql, [banIds], (err, res) => {
+      if (err) { resolve(false); throw err };
+      const sql2 = "insert into ban (userId) values (?)"
+      connection.query(sql2, [banIds], (err, res) => {
+        if (err) throw err;
+        resolve(true);
+      })
+
+    });
+  });
+}
+
+function moveDeathClock(deathIds) {
+  return new Promise((resolve) => {
+    const sql = "insert into users userId, bans values (?) ON duplicate key update set ban = VALUES(ban)"
+    connection.query(sql, [deathIds], (err, res) => {
+      if (err) throw err;
+    })
+  });
+}
