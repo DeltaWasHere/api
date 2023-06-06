@@ -2609,7 +2609,7 @@ app.get("/unban/:userId", async (req, res) => {
 })
 
 
-const job = schedule.scheduleJob('01 00 00 * * *', async (req, res) => {
+const job = schedule.scheduleJob({minute: 30}, async (req, res) => {
   //1 get thte users
   let users = await getUsers();
   //2 check the ban clocks 
