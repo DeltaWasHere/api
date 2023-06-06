@@ -1926,7 +1926,7 @@ function getGamesCoverAndGenres(title) {
     request.post({
       url: 'https://api.igdb.com/v4/games',
       headers: { "Client-ID": "w9sztpgnr7iygjteswbh40n3iboa9t", "Authorization": "Bearer lapn9y1ui98jgvxosp0801pid70byk" },
-      body: `search "${title}"; fields name, cover.url, genres.name, category; where category = (0,3,4,8,9,11); limit 10;`,
+      body: `search "${title}"; fields name, cover.url, genres.name, category; where category = (0,3,4,8,9,11, 10); limit 10;`,
       json: false
     }, function (error, response, body) {
       if (response.statusCode > 399) throw ("LIMITE ALCANZADO ERROR: " + response.statusCode);
