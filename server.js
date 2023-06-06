@@ -2610,10 +2610,14 @@ app.get("/ban/:userId", async (req, res) => {
 
 app.get("/unban/:userId", async (req, res) => {
   const userId = req.params.userId;
-  const sql = `selete from ban where userId = ${userId}`
+  const sql = `delete from ban where userId = ${userId}`
   connection.query(sql, (err, result) => {
     if (err) throw err;
-    res.send(true)
+    const sql2 = `update users set ban = NULL where userId = ${userId}`
+    connection.query(sql2, (err, res)=>{
+      res.send(true)
+    });
+    
   });
 })
 
