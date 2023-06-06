@@ -1911,7 +1911,7 @@ async function uploadUserStats(userid, platform) {
   }
 }
 function getGamesCoverAndGenres(title) {
-  title = title.replace(/\([^)]+\)|[^\w\d: ü\-]|(multiplayer|zombies|playable teaser|public test|test server|goty edition|goty|enhanced edition|: end of a dream)$/gi, "")
+  title = title.replace(/\([^)]+\)|[^\w\d: ü\-]|(multiplayer|zombies|playable teaser|public test|test server|goty edition|goty|enhanced edition| : End of Dream)$/gi, "")
   title = title.replace(/([:\-])/g, " $1 ")
   title = title.replace(/ {2,}/g, " ")
   title = title.replace(/^[^\w\d]*|[^\w\d]*$/g, "")
