@@ -2065,6 +2065,7 @@ console.log(gamesOwned);
                 }
               }
               timeplayed = ((hours == undefined) ? 0 : (hours * 60)) + ((minutes == undefined) ? 0 : minutes) + ((seconds == undefined) ? 0 : ((1 / 60) * seconds));
+              cvonsole.log(timeplayed);
 
             }
             if (!((gamesResponseArray[i][idPath] == 431960 || gamesResponseArray[i][idPath] == 1325860) && platform == "steam")) {
