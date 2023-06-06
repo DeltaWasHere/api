@@ -1921,6 +1921,7 @@ function getGamesCoverAndGenres(title) {
   title = title.replace(/ {2,}/g, " ")
   title = title.replace(/^[^\w\d]*|[^\w\d]*$/g, "")
   title = title.replace("Ragnark", "Ragnarok")
+  title = title.replace ("Persona5", "Persona 5")
   let extraGameInfo = [];
   console.log(title);
   return new Promise((resolve, reject) => {
