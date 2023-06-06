@@ -1986,7 +1986,7 @@ function getOwnedGames(userid, platform) {
   return new Promise((resolve, reject) => {
     let urlSteam = 'https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=B180F37955BEBCD1CFA8DF8E32ECC03E&steamid=' + userid + '&include_appinfo=true&include_played_free_games=true'
     let urlXbox = 'https://achievements.xboxlive.com/users/xuid(' + userid + ')/history/titles?maxItems=1000';
-    let urlPs = 'https://m.np.playstation.net/api/gamelist/v2/users/' + userid + '/titles?categories=ps4_game&limit=1000&offset=0';
+    let urlPs = 'https://m.np.playstation.com/api/gamelist/v2/users/' + userid + '/titles?categories=ps4_game&limit=1000&offset=0';
     let url, headers;
     switch (platform) {
       case "xbox":
