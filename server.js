@@ -1353,6 +1353,7 @@ function getGameTitle(gameId, platform) {
     //console.log(url);
     headers['Accept-Language'] = "en-en";
     request({ headers: headers, uri: url }, function (err, res, body) {
+      if(body==undefined) throw "error"
       console.log(body)
       let parsedResponse;
       parsedResponse = JSON.parse(body);
