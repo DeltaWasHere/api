@@ -115,7 +115,7 @@ app.set('port', 3000);
 
 //function to get the apikeys that needs to be shceduled every 50 minutes aprox
 async function main() {
-  myNpsso = env.PSTOKEN;//mypsnpassword
+  myNpsso = process.env.PSTOKEN;//mypsnpassword
   accesCode = await exchangeNpssoForCode(myNpsso);
   authorization = await exchangeCodeForAccessToken(accesCode);
   psHeaders['Authorization'] = 'Bearer ' + authorization.accessToken;
