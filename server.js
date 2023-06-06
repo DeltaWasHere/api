@@ -449,6 +449,17 @@ app.get("/profile/:transaction", async function (req, res) {
   let platform = req.get("platform");
   let language = req.get("language");
   let sql;
+
+  let status = await checkUserExitance(userId);
+  console.log(status)
+  if (status !== true) {
+    res.send(status);
+    try {
+      await uploadUserStats(userId, platform);
+    } catch (err) {
+      throw err;
+    }
+  } 
   switch (transaction) {
     case "preview":
       let gamesToCheck = [];
@@ -548,18 +559,7 @@ app.get("/profile/:transaction", async function (req, res) {
 
     case "check":
       console.log(userId)
-      let status = await checkUserExitance(userId);
-      console.log(status)
-      if (status === true) {
-        res.send(status);
-      } else {
-        res.send(status);
-        try {
-          await uploadUserStats(userId, platform);
-        } catch (err) {
-          throw err;
-        }
-      }
+
       break;
     default:
 
@@ -735,9 +735,9 @@ app.get('/search/game', function (req, res) {
             res.send(result1);
           } else {
             console.log("no se pudo encontrar el juego");//intentar añadir
-            try{
+            try {
               addNonRecordeddGame(res, info, platform);
-            }catch(error){
+            } catch (error) {
               res.send([]);
             }
           }
@@ -1353,7 +1353,7 @@ function getGameTitle(gameId, platform) {
     //console.log(url);
     headers['Accept-Language'] = "en-en";
     request({ headers: headers, uri: url }, function (err, res, body) {
-      if(err) throw err
+      if (err) throw err
       console.log(body)
       let parsedResponse;
       parsedResponse = JSON.parse(body);
@@ -2614,7 +2614,7 @@ app.get("/unban/:userId", async (req, res) => {
 })
 
 
-const job = schedule.scheduleJob({minute: 30}, async (req, res) => {
+const job = schedule.scheduleJob({ minute: 30 }, async (req, res) => {
   console.log("Running daily schedule");
 
   //1 get thte users
@@ -2635,22 +2635,22 @@ const job = schedule.scheduleJob({minute: 30}, async (req, res) => {
   }
 
   //3 ban the users needed cascade fk should delete their things too
-  if(ban.length>0){
+  if (ban.length > 0) {
     await banUsers(ban);
   }
-  if(banAwait.length>0){
+  if (banAwait.length > 0) {
     await moveDeathClock(banAwait);
   }
 
   //4 upload temainign users stats
   for (let i = 0; i < users.length; i++) {
-    if(users[i].ban==null){
+    if (users[i].ban == null) {
       uploadUserStats(users[i].userId, users[i].platform);
     }
   }
   //5 recalculate the global score
-  connection.query("CALL calculateGlobalScore", (err)=>{
-    if(err) throw err;
+  connection.query("CALL calculateGlobalScore", (err) => {
+    if (err) throw err;
     console.log("global score recalculated")
   })
 });
