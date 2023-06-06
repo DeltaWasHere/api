@@ -2610,11 +2610,12 @@ app.get("/unban/:userId", async (req, res) => {
 
 
 const job = schedule.scheduleJob({minute: 30}, async (req, res) => {
-  console.log("Running daily schedule")
+  console.log("Running daily schedule");
+
   //1 get thte users
   let users = await getUsers();
-  //2 check the ban clocks 
 
+  //2 check the ban clocks 
   let ban = []; //people to ban
   let banAwait = []; //people to reduce one of their clock
   for (let i = 0; i < users.length; i++) {
@@ -2627,9 +2628,14 @@ const job = schedule.scheduleJob({minute: 30}, async (req, res) => {
       }
     }
   }
+
   //3 ban the users needed cascade fk should delete their things too
-  await banUsers(ban);
-  await moveDeathClock(banAwait);
+  if(ban.length>0){
+    await banUsers(ban);
+  }
+  if(banAwait.length>0){
+    await moveDeathClock(banAwait);
+  }
 
   //4 upload temainign users stats
   for (let i = 0; i < users.length; i++) {
