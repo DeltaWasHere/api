@@ -2587,11 +2587,26 @@ app.get("/price/:title", async (req, res) => {
 
 app.get("/ban/:userId", async (req, res) => {
   const userId = req.params.userId;
+  const reason = req.get('reason');
   const sql = `update users set ban = 7 where userId =${userId} `
   connection.query(sql, (err, result) => {
     if (err) throw err;
+    const sql2 = `insert into ban (userId, reason) values (${userId}, '${reason}')`
+    connection.query(sql2, (err, result2) => {
+      if (err) throw err;
+      res.send(true)
+    })
   });
 });
+
+app.get("/unban/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  const sql = `selete from ban where userId = ${userId}`
+  connection.query(sql, (err, result) => {
+    if (err) throw err;
+    res.send(true)
+  });
+})
 
 
 const job = schedule.scheduleJob('01 00 00 * * *', async (req, res) => {
@@ -2602,12 +2617,12 @@ const job = schedule.scheduleJob('01 00 00 * * *', async (req, res) => {
   let ban = []; //people to ban
   let banAwait = []; //people to reduce one of their clock
   for (let i = 0; i < users.length; i++) {
-    if (users[i] != null) {
+    if (users[i].ban != null) {
       if (((users[i].ban) - 1) == 0) {
         ban.push(users[i].userId)
       } else {
         users[i].ban = users[i].ban - 1;
-        banAwait.push(users[i])
+        banAwait.push(users[i].userId)
       }
     }
   }
@@ -2617,7 +2632,9 @@ const job = schedule.scheduleJob('01 00 00 * * *', async (req, res) => {
 
   //4 upload temainign users stats
   for (let i = 0; i < users.length; i++) {
-    uploadUserStats(users[i].userId, users[i].platform);
+    if(users[i].ban==null){
+      uploadUserStats(users[i].userId, users[i].platform);
+    }
   }
   //5 recalculate the global scores
 });
