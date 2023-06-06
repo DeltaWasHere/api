@@ -735,7 +735,11 @@ app.get('/search/game', function (req, res) {
             res.send(result1);
           } else {
             console.log("no se pudo encontrar el juego");//intentar añadir
-            addNonRecordeddGame(res, info, platform);
+            try{
+              addNonRecordeddGame(res, info, platform);
+            }catch(error){
+              res.send([]);
+            }
           }
         });
       }
