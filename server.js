@@ -1920,6 +1920,7 @@ function getGamesCoverAndGenres(title) {
   title = title.replace(/([:\-])/g, " $1 ")
   title = title.replace(/ {2,}/g, " ")
   title = title.replace(/^[^\w\d]*|[^\w\d]*$/g, "")
+  title = title.replace("Ragnark", "Ragnarok")
   let extraGameInfo = [];
   console.log(title);
   return new Promise((resolve, reject) => {
