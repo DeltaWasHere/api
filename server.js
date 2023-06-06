@@ -1775,7 +1775,7 @@ async function uploadUserStats(userid, platform) {
       } else {
         let temp = '';
         for (let i = 1; i < remained + 1; i++) {
-          temp = temp + gamesOwned[(((iteration + 1) * 5) - 1) - (5 - I)].gameId + "%2C";
+          temp = temp + gamesOwned[(((iteration + 1) * 5) - 1) - (5 - i)].gameId + "%2C";
         }
         temp = temp.substring(0, (temp.length - 3));
         psPromises.push(getPsIds(temp));
