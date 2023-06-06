@@ -2033,8 +2033,9 @@ function getOwnedGames(userid, platform) {
         //Save the appid+hours in each game of the user if the game is from ps or steam xbox only save titles then get time
         for (let i = 0; i < gamesResponseArray.length; i++) {
           if (platform != "xbox") {
+            let timeplayed;
             if (platform == "ps") {
-              let timeplayed, seconds, hours, minutes, c = 0;
+              let  seconds, hours, minutes, c = 0;
               let stringTime = '';
               stringTime = gamesResponseArray[i][timePath];
               stringTime = stringTime.slice(2, stringTime.length);
