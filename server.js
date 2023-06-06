@@ -2007,7 +2007,6 @@ function getOwnedGames(userid, platform) {
     request({ headers: headers, uri: url }, function (err, response, body) {
       if (!err) {
         let gamesOwned = JSON.parse(body);
-console.log(gamesOwned);
         let gamesResponseArray;
         let timePath, idPath;
         let appsarray = [];
