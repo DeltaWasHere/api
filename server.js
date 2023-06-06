@@ -115,8 +115,8 @@ app.set('port', 3000);
 
 //function to get the apikeys that needs to be shceduled every 50 minutes aprox
 async function main() {
-  myNpsso = "JOF1OzyCRWa04dqBJN7J0nQXztk7iLfp44vbpPrP5KheoR3197mpRLmiFKQhiRmB";//mypsnpassword
-  //accesCode = await exchangeNpssoForCode(myNpsso);
+  myNpsso = env.PSTOKEN;//mypsnpassword
+  accesCode = await exchangeNpssoForCode(myNpsso);
   authorization = await exchangeCodeForAccessToken(accesCode);
   psHeaders['Authorization'] = 'Bearer ' + authorization.accessToken;
   console.log("psn token ready");
@@ -2643,7 +2643,11 @@ const job = schedule.scheduleJob({minute: 30}, async (req, res) => {
       uploadUserStats(users[i].userId, users[i].platform);
     }
   }
-  //5 recalculate the global scores
+  //5 recalculate the global score
+  connection.query("CALL calculateGlobalScore", (err)=>{
+    if(err) throw err;
+    console.log("global score recalculated")
+  })
 });
 
 function getUsers() {
