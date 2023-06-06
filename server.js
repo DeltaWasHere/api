@@ -2600,7 +2600,7 @@ app.get("/ban/:userId", async (req, res) => {
   const sql = `update users set ban = 7 where userId =${userId} `
   connection.query(sql, (err, result) => {
     if (err) throw err;
-    const sql2 = `insert into ban (userId, reason) values (${userId}, '${reason}')`
+    const sql2 = `insert ignore into ban (userId, reason) values (${userId}, '${reason}')`
     connection.query(sql2, (err, result2) => {
       if (err) throw err;
       res.send(true)
