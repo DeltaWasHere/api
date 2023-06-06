@@ -1233,7 +1233,7 @@ function getAchievementsForGameId(gameId, platform, language) {
   return new Promise((resolve, reject) => {
     let urlSteam = 'https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key=B180F37955BEBCD1CFA8DF8E32ECC03E&appid=' + gameId + "&l=" + language;
     let urlXbox = 'https://xbl.io/api/v2/achievements/title/' + gameId;
-    let urlPs = "https://m.np.playstation.net/api/trophy/v1/npCommunicationIds/" + gameId + "/trophyGroups/all/trophies?npServiceName=trophy";
+    let urlPs = "https://m.np.playstation.com/api/trophy/v1/npCommunicationIds/" + gameId + "/trophyGroups/all/trophies?npServiceName=trophy";
     let url, icon, id, description;
     let headers;
     switch (platform) {
@@ -1332,7 +1332,7 @@ async function addNonRecordeddGame(response, gameId, platform) {
 function getGameTitle(gameId, platform) {
   return new Promise((resolve, reject) => {
     let urlXbox = 'https://xbl.io/api/v2/achievements/title/' + gameId;
-    let urlPs = 'https://m.np.playstation.net/api/trophy/v1/npCommunicationIds/' + gameId + '/trophyGroups?npServiceName=trophy';
+    let urlPs = 'https://m.np.playstation.com/api/trophy/v1/npCommunicationIds/' + gameId + '/trophyGroups?npServiceName=trophy';
     let urlSteam = 'https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key=B180F37955BEBCD1CFA8DF8E32ECC03E&appid=' + gameId;
     let url = 'dasfuq';
     let headers = {};
@@ -1430,7 +1430,7 @@ function getUnlockedAchievementsForGameId(userId, gameId, platform) {
   //attributes that i will need are 
   return new Promise((resolve, reject) => {
     //urls for quering
-    let urlPs = "https://m.np.playstation.net/api/trophy/v1/users/" + userId + "/npCommunicationIds/" + gameId + "/trophyGroups/all/trophies?npServiceName=trophy"
+    let urlPs = "https://m.np.playstation.com/api/trophy/v1/users/" + userId + "/npCommunicationIds/" + gameId + "/trophyGroups/all/trophies?npServiceName=trophy"
     let xboxUrl = "https://achievements.xboxlive.com/users/xuid(" + userId + ")/achievements?maxItems=100000&titleId=" + gameId;
     let urlSteam = "http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=" + gameId + "&key=B180F37955BEBCD1CFA8DF8E32ECC03E&steamid=" + userId;
     let url, headers;
@@ -1638,7 +1638,7 @@ function getRatity(gameId) {
 function getUserInfo(userid, platform) {
   return new Promise((resolve, reject) => {
     let xboxUrl = "https://profile.xboxlive.com/users/batch/profile/settings";
-    let psUrl = 'https://m.np.playstation.net/api/userProfile/v1/internal/users/' + userid + "/profiles";
+    let psUrl = 'https://m.np.playstation.com/api/userProfile/v1/internal/users/' + userid + "/profiles";
     let steamUrl = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=B180F37955BEBCD1CFA8DF8E32ECC03E&steamids=" + userid;
     let url;
     let userInfo = {};
@@ -1986,7 +1986,7 @@ function getOwnedGames(userid, platform) {
   return new Promise((resolve, reject) => {
     let urlSteam = 'https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=B180F37955BEBCD1CFA8DF8E32ECC03E&steamid=' + userid + '&include_appinfo=true&include_played_free_games=true'
     let urlXbox = 'https://achievements.xboxlive.com/users/xuid(' + userid + ')/history/titles?maxItems=1000';
-    let urlPs = 'https://m.np.playstation.net/api/gamelist/v2/users/' + userid + '/titles?categories=ps4_game&limit=1000&offset=0';
+    let urlPs = 'https://m.np.playstation.com/api/gamelist/v2/users/' + userid + '/titles?categories=ps4_game&limit=1000&offset=0';
     let url, headers;
     switch (platform) {
       case "xbox":
