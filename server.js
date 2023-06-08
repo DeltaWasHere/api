@@ -305,7 +305,7 @@ function addTag(res, gameId, userId, achievementId, type, tag) {
   let col, table;
   if (type == "dlc") {
     col = "link";
-    table = "dlcTags";
+    table = "dlctags";
   } else {
     col = "tag";
     table = "tags";
