@@ -540,7 +540,7 @@ const job = schedule.scheduleJob('*/3 * * * *', async (req, res) => {
   for (let i = 0; i < users.length; i++) {
     if (users[i].ban == null) {
       console.log("uploading stats of: "+ users[i].userId)
-      uploadUserStats(users[i].userId, users[i].platform);
+      await uploadUserStats(users[i].userId, users[i].platform);
     }
   }
   //5 recalculate the global score
