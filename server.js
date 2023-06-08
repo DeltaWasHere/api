@@ -237,7 +237,7 @@ app.get('/search/game', function (req, res) {
 });
 
 const viewGame = require('./routes/viewGame')
-app.use('/view/game', viewGame);
+app.use('/view/game', viewGame(connection));
 
 
 app.get('/rate/:gameid', function (req, res) {
