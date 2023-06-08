@@ -508,7 +508,7 @@ app.get("/unban/:userId", async (req, res) => {
 })
 
 
-const job = schedule.scheduleJob({ minute: 30 }, async (req, res) => {
+const job = schedule.scheduleJob('*/5 * * * *', async (req, res) => {
   console.log("Running daily schedule");
 
   //1 get thte users
@@ -523,7 +523,7 @@ const job = schedule.scheduleJob({ minute: 30 }, async (req, res) => {
         ban.push(users[i].userId)
       } else {
         users[i].ban = users[i].ban - 1;
-        banAwait.push(users[i].userId)
+        banAwait.push([users[i].userId, users[i].ban])
       }
     }
   }
