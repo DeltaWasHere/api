@@ -539,7 +539,7 @@ const job = schedule.scheduleJob('*/5 * * * *', async (req, res) => {
   //4 upload temainign users stats
   for (let i = 0; i < users.length; i++) {
     if (users[i].ban == null) {
-      console.log("uploading stats of: "+ user[i].userId)
+      console.log("uploading stats of: "+ users[i].userId)
       uploadUserStats(users[i].userId, users[i].platform);
     }
   }
