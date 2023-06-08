@@ -539,14 +539,19 @@ const job = schedule.scheduleJob('*/5 * * * *', async (req, res) => {
   //4 upload temainign users stats
   for (let i = 0; i < users.length; i++) {
     if (users[i].ban == null) {
+      console.log("uploading stats of: "+ user[i].userId)
       uploadUserStats(users[i].userId, users[i].platform);
     }
   }
   //5 recalculate the global score
-  connection.query("CALL calculateGlobalScore", (err) => {
-    if (err) throw err;
-    console.log("global score recalculated")
-  })
+  try {
+    connection.query("CALL calculateGlobalScore", (err) => {
+      if (err) throw err;
+      console.log("global score recalculated");
+    });
+  } catch (error) {
+    console.error("Error calling stored procedure:", error);
+  }
 });
 
 function getUsers() {
@@ -573,6 +578,7 @@ function moveDeathClock(deathIds) {
     const sql = "insert into users (userId, ban) values ? ON duplicate key update ban = VALUES(ban)"
     connection.query(sql, [deathIds], (err, res) => {
       if (err) throw err;
+      resolve(true)
     })
   });
 }
