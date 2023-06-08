@@ -10,8 +10,12 @@ let xblHeaders = {
   }
 
 module.exports = (connection) => {
-    router.get('/:gameid', function (req, res) {
 
+  router.get("/", function (req,res){
+    console.log("gameview root");
+  });
+    router.get('/:gameid', function (req, res) {
+      console.log("gameview  gameId entered");
         if (req.params.gameid) {
             let gameid = req.params.gameid;
             let userid = req.get('userid');
