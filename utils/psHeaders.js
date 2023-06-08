@@ -1,3 +1,5 @@
+const { exchangeCodeForAccessToken, exchangeNpssoForCode, makeUniversalSearch } = require('psn-api');
+
 let psHeaders = {
 }
 async function initializePSNToken() {

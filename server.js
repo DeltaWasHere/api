@@ -4,7 +4,6 @@ let fs = require('fs');
 const schedule = require('node-schedule');
 const app = express();
 let request = require('request');
-let mysql = require('mysql');
 let bodyParser = require('body-parser');
 let SteamAuth = require("node-steam-openid");
 const cors = require('cors');

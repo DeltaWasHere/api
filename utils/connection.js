@@ -1,3 +1,6 @@
+let mysql = require('mysql');
+
+
 let connection = mysql.createConnection({
     host: 'bzdpujn96e42tugmzkmi-mysql.services.clever-cloud.com',
     user: 'uyn2j8jm7hyaezaf',
