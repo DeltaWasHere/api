@@ -353,7 +353,6 @@ function readTag(res, gameId, achievementId) {
 
 app.listen(process.env.PORT || app.get('port'), function () {
   console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
-  main();
 });
 
 function delay(time) {
