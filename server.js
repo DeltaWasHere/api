@@ -500,7 +500,7 @@ app.get("/unban/:userId", async (req, res) => {
   connection.query(sql, (err, result) => {
     if (err) throw err;
     const sql2 = `update users set ban = NULL where userId = ${userId}`
-    connection.query(sql2, (err, res)=>{
+    connection.query(sql2, (err, result2)=>{
       res.send(true)
     });
     
