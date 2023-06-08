@@ -10,7 +10,7 @@ let xblHeaders = {
   }
 
 module.exports = (connection) => {
-    router.get('/view/game/:gameid', function (req, res) {
+    router.get('/:gameid', function (req, res) {
 
         if (req.params.gameid) {
             let gameid = req.params.gameid;

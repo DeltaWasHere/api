@@ -5,7 +5,7 @@ const request = require('request');
 const {uploadUserStats} = require('../utils/uploadUserStats');
 
 module.exports = (connection)=>{
-    app.get("/profile/:transaction", async function (req, res) {
+    app.get("/:transaction", async function (req, res) {
         let transaction = req.params.transaction;
         let userId = req.get("userId");
         let platform = req.get("platform");
