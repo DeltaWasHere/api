@@ -570,7 +570,7 @@ function banUsers(banIds) {
 
 function moveDeathClock(deathIds) {
   return new Promise((resolve) => {
-    const sql = "insert into users (userId, bans) values ? ON duplicate key update ban = VALUES(ban)"
+    const sql = "insert into users (userId, ban) values ? ON duplicate key update ban = VALUES(ban)"
     connection.query(sql, [deathIds], (err, res) => {
       if (err) throw err;
     })
