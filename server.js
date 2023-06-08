@@ -101,7 +101,7 @@ const threads = require('./routes/threads')
 app.use("/thread", threads(connection, storage));
 
 const road = require("./routes/road");
-const { getPrices } = require('./utils/getPrices');
+
 app.use('/road', bodyParser.json(), road(connection));
 
 
