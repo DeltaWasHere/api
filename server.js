@@ -91,7 +91,7 @@ app.use("/leaderboard", leaderboard(connection));
 
 
 const profile = require('./routes/profile');
-app.get("/profile", profile(connection))
+app.use("/profile", profile(connection))
 
 const guides = require('./routes/guides');
 app.use('/guide', guides(connection));
