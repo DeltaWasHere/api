@@ -5,6 +5,7 @@ const {getGamesCoverAndGenres} = require('./gameCoversAndGenres');
 const psHeaders = require("../utils/psHeaders");
 const xboxHeaders = require("./xboxHeaders");
 
+
 async function uploadUserStats(userid, platform) {
 
     //tenemso que sacar el avatarname y iod del usuario de otra manera solo lo añadimos
