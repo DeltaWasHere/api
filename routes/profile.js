@@ -248,5 +248,15 @@ module.exports = (connection)=>{
           });
         });
       }
+
+      function getRatity(gameId) {
+        return new Promise((resolve, reject) => {
+          let sql = "SELECT DISTINCT achievementId, rarity FROM achievements WHERE gameId=?";
+          connection.query(sql, gameId, (error, result) => {
+            if (error) throw error;
+            resolve(result);
+          });
+        });
+      }
     return router;
 }
