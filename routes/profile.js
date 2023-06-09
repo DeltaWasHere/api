@@ -1,6 +1,5 @@
 const express = require('express');
 let bodyParser = require('body-parser');
-const psHeaders = require(psHeaders);
 let xblHeaders = {
   'X-Contract': '2',
   'X-Authorization': 'kos4gk0cwgowc84o8c88cg8sgs8c8gsk0oc'
