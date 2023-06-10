@@ -1,3 +1,4 @@
+const connection = require('../utils/connection');
 async function getPrices(platform, gameId, title) {
     if (title == undefined) {
       title = await getStoredGameTitle(gameId);
