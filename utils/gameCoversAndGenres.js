@@ -8,6 +8,7 @@ function getGamesCoverAndGenres(title) {
     title = title.replace("Ragnark", "Ragnarok")
     title = title.replace ("Persona5", "Persona 5");
     title = title.replace("Fall Guys : Ultimate Knockout", "Fall Guys")
+    title = title.replace("Dont Starve","Don't Starve")
     let extraGameInfo = [];
     console.log(title);
     return new Promise((resolve, reject) => {
