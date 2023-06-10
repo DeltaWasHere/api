@@ -1,4 +1,5 @@
 const connection = require('../utils/connection');
+const puppeteer = require('puppeteer')
 async function getPrices(platform, gameId, title) {
     if (title == undefined) {
       title = await getStoredGameTitle(gameId);
