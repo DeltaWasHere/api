@@ -1,7 +1,7 @@
 const request = require('request');
 
 function getGamesCoverAndGenres(title) {
-    title = title.replace(/\([^)]+\)|[^\w\d: ü\-]|(multiplayer|zombies|playable teaser|public test|test server|goty edition|goty|enhanced edition|: End of Dream| - Season 4| Series| : Ultimate Knockout)$/gi, "")
+    title = title.replace(/\([^)]+\)|[^\w\d: ü\-]|(multiplayer|zombies|playable teaser|public test|test server|goty edition|goty|enhanced edition|: End of Dream| - Season 4| Series| : Ultimate Knockout|Mod: Defence Alliance 2)$/gi, "")
     title = title.replace(/([:\-])/g, " $1 ")
     title = title.replace(/ {2,}/g, " ")
     title = title.replace(/^[^\w\d]*|[^\w\d]*$/g, "")
