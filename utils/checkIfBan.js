@@ -29,3 +29,7 @@ function checkIfBanAppeal() {
 
     })
 }
+module.exports = {
+    checkIfBan,
+    checkIfBanAppeal
+}
