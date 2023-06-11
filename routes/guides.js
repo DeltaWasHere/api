@@ -75,6 +75,7 @@ module.exports = (connection) => {
       
       function addGuide(gameId, userId, achievementId, content) {
         return new Promise((resolve, reject) => {
+          console.log("Adding guide for ahcievement: "+ achievementId)
           let sql = 'insert into achievementguides (gameId, userId, achievementId, content, date) VALUES (?) ON DUPLICATE KEY update content = VALUES(content), date = VALUES(date), public=0 ';
           let array = [gameId, userId, achievementId, content, Math.floor(Date.now() / 1000)];
           connection.query(sql, [array], (error, result) => {
