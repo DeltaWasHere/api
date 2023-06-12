@@ -19,7 +19,7 @@ module.exports = (connection)=>{
         let achievementId = req.get("achievementId");
         let platform = req.get("platform");
       
-        let sql = ["SELECT users.avatar, users.name, achievements.dateAchieved as score FROM achievements INNER JOIN users ON achievements.userId = users.userId WHERE achievements.achievementId = '" + achievementId + "' ORDER BY achievements.dateAchieved ASC",
+        let sql = ["SELECT users.avatar, users.name, achievements.dateAchieved as score FROM achievements INNER JOIN users ON achievements.userId = users.userId WHERE achievements.achievementId = '" + achievementId + "' AND achievements.gameId = '"+gameId+"'ORDER BY achievements.dateAchieved ASC",
         "SELECT users.avatar, users.name, usersgame.completedDate as score FROM usersgame INNER JOIN users ON users.userId = usersgame.userId WHERE usersgame.gameId = " + gameId + " AND  usersgame.completedDate IS NOT null ORDER BY completedDate ASC",
         "SELECT avatar, name, score FROM users where platform = '" + platform + "' order by score ASC"];
         console.log(leader)
