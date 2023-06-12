@@ -61,13 +61,13 @@ module.exports = (connection, storage) => {
       //this adds an offer either public or as an offer
       //needs a body with: userId(autor), gameId(gamepublished), key(the key of the trade), media(validation archieve), interestedGame1,interestedGame2,interestedGame3
       case "addOffer":
-         ban = await checkIfBan(userId);
-         banAppeal = await checkIfBanAppeal(userId);
-        if (banAppeal){
+        ban = await checkIfBan(userId);
+        banAppeal = await checkIfBanAppeal(userId);
+        if (banAppeal) {
           res.status(401)
         }
-        if(ban){
-        res.status(403)
+        if (ban) {
+          res.status(403)
         }
 
         if (req.file === undefined) {
@@ -87,12 +87,16 @@ module.exports = (connection, storage) => {
           req.body.media = req.body.media.replace("\\", "\\\\");
           status = await addOffer(req.body);
         }
+
+        if (!checkIfGamesExists(req.body.gameId)) {
+          res.status(406);
+        }
         res.send(status);
         break;
 
       case "addTrade":
-         ban = await checkIfBan(userId);
-         banAppeal = await checkIfBanAppeal(userId);
+        ban = await checkIfBan(userId);
+        banAppeal = await checkIfBanAppeal(userId);
         if (banAppeal) {
           res.status(401)
         }
@@ -103,7 +107,6 @@ module.exports = (connection, storage) => {
         console.log(req.body);
         if (req.file === undefined) { //no file to storage
           req.body.media = "NULL";
-          status = await addTrade(req.body);
         } else {
           const split = req.file.originalname.split(".");
           const storageRef = ref(storage, req.body.userId.replace(/['"]+/g, '') + req.body.gameId.replace(/['"]+/g, '') + "-" + Date.now() + "." + split[split.length - 1]);
@@ -116,9 +119,23 @@ module.exports = (connection, storage) => {
 
           req.body.media = mediaPath;
           req.body.media = req.body.media.replace("\\", "\\\\");
-          status = await addTrade(req.body);
+        }
+        let gamesToCkeck = [];
+        gamesToCkeck.push(req.body.gameId);
+        if (req.body.interestedGameId1 !== "" || req.body.interestedGameId1 != undefined) {
+          gamesToCkeck.push(req.body.interestedGameId1)
+        }
+        if (req.body.interestedGameId2 !== "" || req.body.interestedGameId2 != undefined) {
+          gamesToCkeck.push(req.body.interestedGameId2)
+        }
+        if (req.body.interestedGameId3 !== "" || req.body.interestedGameId3 != undefined) {
+          gamesToCkeck.push(req.body.interestedGameId3)
+        }
+        if (!checkIfGamesExists(gamesToCkeck)) {
+          res.status(406);
         }
 
+        status = await addTrade(req.body);
 
         res.send(status);
         break;
@@ -128,12 +145,12 @@ module.exports = (connection, storage) => {
       case "rate":
         ban = await checkIfBan(userId);
         banAppeal = await checkIfBanAppeal(userId);
-       if (banAppeal){
-         res.status(401)
-       }
-       if(ban){
-       res.status(403)
-       }
+        if (banAppeal) {
+          res.status(401)
+        }
+        if (ban) {
+          res.status(403)
+        }
         console.log("user " + userId + "added " + req.body.rate + "of rate to the trade " + tradeId)
         status = await addRate(tradeId, userId, req.body.rate);
         res.send(status);
@@ -144,12 +161,12 @@ module.exports = (connection, storage) => {
       case "tradeTransaction":
         ban = await checkIfBan(userId);
         banAppeal = await checkIfBanAppeal(userId);
-       if (banAppeal){
-         res.status(401)
-       }
-       if(ban){
-       res.status(403)
-       }
+        if (banAppeal) {
+          res.status(401)
+        }
+        if (ban) {
+          res.status(403)
+        }
         let tradeTransaction = req.body.tradeTransaction;
         let destinedId = req.body.destinedId;
         status = await makeTradeTransaction(tradeId, tradeTransaction, destinedId);
@@ -292,6 +309,21 @@ module.exports = (connection, storage) => {
         resolve(result1);
       });
     });
+  }
+
+
+  function checkIfGamesExists(gamesIds) {
+    return new Promise((resolve, reject) => {
+      const sql = "select from games IN(?)"
+      connection.query(sql, (err, result) => {
+        if (err) throw err;
+        if (gamesIds.length == result.length) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      })
+    })
   }
 
   function tradeHistory(userId) {

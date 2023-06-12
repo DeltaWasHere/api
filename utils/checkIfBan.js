@@ -16,7 +16,7 @@ function checkIfBan(userId) {
 }
 function checkIfBanAppeal(userId) {
     return new Promise((resolve) => {
-        const sql = "select from users where userId=" + userId+" AND ban is not null"
+        const sql = "select * from users where userId=" + userId+" AND ban is not null"
         connection.query(sql, (err, result) => {
             if (err) throw err;
             //userid with ban not null found in the users
