@@ -94,7 +94,6 @@ async function uploadUserStats(userid, platform) {
     }
     if (platform == "steam") {
         let gameTitles = await getGameTitles();
-        console.log(gameTitles);
         for (let i = 0; i < gamesToAdd.length; i++) {
             for (let j = 0; j < gameTitles.length; j++) {
                 if (gamesToAdd[i].gameId == gameTitles[j].appId) {
