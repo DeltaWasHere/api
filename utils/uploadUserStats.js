@@ -451,7 +451,10 @@ function getOwnedGames(userid, platform) {
         if (Object.keys(parsedResponse.game).length == 0) {
           resolve();
         } else {
-          resolve(ownedGame);
+          if(parsedResponse.availableGameStats.achievements!=undefined && parsedResponse.availableGameStats.achievements!=null ){
+            resolve(ownedGame);
+          }
+          resolve();
         }
       });
     });

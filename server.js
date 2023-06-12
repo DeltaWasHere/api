@@ -6,7 +6,7 @@ const app = express();
 let request = require('request');
 let bodyParser = require('body-parser');
 let SteamAuth = require("node-steam-openid");
-const {checkIfBan, checkIfBanAppeal} = require("./utils/checkIfBan");
+const { checkIfBan, checkIfBanAppeal } = require("./utils/checkIfBan");
 const cors = require('cors');
 let puppeteer = require('puppeteer');
 const multer = require('multer');
@@ -123,11 +123,11 @@ app.get("/auth/steam/authenticate", async (req, res) => {
 
     //Record user function
     console.log(user.steamid);
-    
+
     res.redirect(`https://web-app-a17c6.web.app/auth/${user.steamid}`);
-   
-    
-    
+
+
+
     uploadUserStats(user.steamid, "steam");
 
   } catch (error) {
@@ -140,11 +140,11 @@ app.get("/auth/:userId", async (req, res) => {
   console.log(userId);
   const ban = await checkIfBan(userId);
   const banAppeal = await checkIfBanAppeal(userId);
-  if (banAppeal){
+  if (banAppeal) {
     res.status(401)
   }
-  if(ban){
-  res.status(403)
+  if (ban) {
+    res.status(403)
   }
   connection.query(`select * from users where userId =${userId}`, (err, response) => {
     if (err) throw err;
@@ -251,7 +251,7 @@ const viewGame = require('./routes/viewGame')
 app.use('/view/game', viewGame(connection));
 
 
-app.get('/rate/:gameid', async (req, res)=> {
+app.get('/rate/:gameid', async (req, res) => {
   let gameId = req.params.gameid;
   let rate = req.get('rate');
   let userId = req.get('userId');
@@ -268,7 +268,7 @@ app.get('/rate/:gameid', async (req, res)=> {
   connection.query(sql);
 });
 
-app.get('/pin/:userId', async (req, res)=> {
+app.get('/pin/:userId', async (req, res) => {
   let userId = req.params.userId;
   let gameId = req.get('gameId')
   const ban = await checkIfBan(userId);
@@ -296,7 +296,7 @@ app.get('/pin/:userId', async (req, res)=> {
 });
 
 
-app.get('/vote/:vote', async (req, res)=> {
+app.get('/vote/:vote', async (req, res) => {
   let userId = req.get('userId');
   let guideId = req.get('guideId');
   const ban = await checkIfBan(userId);
@@ -321,7 +321,7 @@ app.get('/vote/:vote', async (req, res)=> {
   });
 });
 
-app.get('/tag/:transaction', async (req, res)=> {
+app.get('/tag/:transaction', async (req, res) => {
   const gameId = req.get('gameId');
   const userId = req.get('userId');
   const achievementId = req.get('achievementId');
@@ -346,7 +346,7 @@ app.get('/tag/:transaction', async (req, res)=> {
 });
 
 function addTag(res, gameId, userId, achievementId, type, tag) {
- 
+
   let col, table;
   if (type == "dlc") {
     col = "link";
@@ -407,6 +407,17 @@ function delay(time) {
 }
 
 async function addNonRecordeddGame(response, gameId, platform) {
+  const placeholder = {
+    "gameId": gameId
+  }
+  if (platform == steam) {
+    const status = await getNoAchievementGame(placeholder);
+
+    if (status == false) {
+      response.end();
+    }
+  }
+
   let title = await getGameTitle(gameId, platform);
   if (title == 'error' || null) {
     response.send("Error");
@@ -513,7 +524,22 @@ function getGameTitle(gameId, platform) {
   });
 }
 
-
+function getNoAchievementGame(ownedGame) {
+  return new Promise((resolve, reject) => {
+    let url = 'https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key=B180F37955BEBCD1CFA8DF8E32ECC03E&appid=' + ownedGame.gameId;
+    request(url, (err, res, body) => {
+      let parsedResponse = JSON.parse(body);
+      if (Object.keys(parsedResponse.game).length == 0) {
+        resolve(false);
+      } else {
+        if (parsedResponse.availableGameStats.achievements != undefined && parsedResponse.availableGameStats.achievements != null) {
+          resolve(true);
+        }
+        resolve(false);
+      }
+    });
+  });
+}
 
 
 app.get("/price/:title", async (req, res) => {
