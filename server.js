@@ -6,6 +6,7 @@ const app = express();
 let request = require('request');
 let bodyParser = require('body-parser');
 let SteamAuth = require("node-steam-openid");
+const {checkIfBan, checkIfBanAppeal} = require("./utils/checkIfBan");
 const cors = require('cors');
 let puppeteer = require('puppeteer');
 const multer = require('multer');
@@ -18,17 +19,16 @@ const { platform, userInfo } = require('os');
 const { throws } = require('assert');
 const { response } = require('express');
 const { error } = require('console');
-const  connection = require('./utils/connection');
-const {uploadUserStats} = require('./utils/uploadUserStats')
-const {addGames} = require('./utils/addGames')
+const connection = require('./utils/connection');
+const { uploadUserStats } = require('./utils/uploadUserStats')
+const { addGames } = require('./utils/addGames')
 const { initializeApp } = require('firebase/app');
 const xboxHeaders = require('./utils/xboxHeaders')
 const psHeaders = require('./utils/psHeaders')
-const {getPrices} = require('./utils/getPrices');
-const {getGamesCoverAndGenres} = require('./utils/gameCoversAndGenres');
+const { getPrices } = require('./utils/getPrices');
+const { getGamesCoverAndGenres } = require('./utils/gameCoversAndGenres');
 const { uploadBytes, ref, getDownloadURL, getStorage } = require('firebase/storage')
 //#region headers and BDConnection setup
-
 
 let xblHeaders = {
   'X-Contract': '2',
@@ -123,8 +123,11 @@ app.get("/auth/steam/authenticate", async (req, res) => {
 
     //Record user function
     console.log(user.steamid);
+    
     res.redirect(`https://web-app-a17c6.web.app/auth/${user.steamid}`);
-
+   
+    
+    
     uploadUserStats(user.steamid, "steam");
 
   } catch (error) {
@@ -135,6 +138,14 @@ app.get("/auth/steam/authenticate", async (req, res) => {
 app.get("/auth/:userId", async (req, res) => {
   let userId = req.params.userId;
   console.log(userId);
+  const ban = await checkIfBan(userId);
+  const banAppeal = await checkIfBanAppeal(userId);
+  if (banAppeal){
+    res.status(401)
+  }
+  if(ban){
+  res.status(403)
+  }
   connection.query(`select * from users where userId =${userId}`, (err, response) => {
     if (err) throw err;
     console.log(response[0]);
@@ -240,19 +251,34 @@ const viewGame = require('./routes/viewGame')
 app.use('/view/game', viewGame(connection));
 
 
-app.get('/rate/:gameid', function (req, res) {
+app.get('/rate/:gameid', async (req, res)=> {
   let gameId = req.params.gameid;
   let rate = req.get('rate');
   let userId = req.get('userId');
+  const ban = await checkIfBan(userId);
+  const banAppeal = await checkIfBanAppeal(userId);
+  if (banAppeal) {
+    res.status(401)
+  }
+  if (ban) {
+    res.status(403)
+  }
   res.end();
   let sql = 'update usersgame set rate = ' + rate + ' where userId=' + userId + ' and gameId = ' + gameId;
   connection.query(sql);
 });
 
-app.get('/pin/:userId', function (req, res) {
+app.get('/pin/:userId', async (req, res)=> {
   let userId = req.params.userId;
   let gameId = req.get('gameId')
-
+  const ban = await checkIfBan(userId);
+  const banAppeal = await checkIfBanAppeal(userId);
+  if (banAppeal) {
+    res.status(401)
+  }
+  if (ban) {
+    res.status(403)
+  }
   let sqlSelec = 'select * from pin where userId = ' + userId + ' and gameId = ' + gameId;
   let sqlIn = 'insert into pin (userId, gameId) values (?)';
   let sqlDelete = 'delete from pin where userId = ' + userId + ' and gameId = ' + gameId;
@@ -270,9 +296,17 @@ app.get('/pin/:userId', function (req, res) {
 });
 
 
-app.get('/vote/:vote', function (req, res) {
+app.get('/vote/:vote', async (req, res)=> {
   let userId = req.get('userId');
   let guideId = req.get('guideId');
+  const ban = await checkIfBan(userId);
+  const banAppeal = await checkIfBanAppeal(userId);
+  if (banAppeal) {
+    res.status(401);
+  }
+  if (ban) {
+    res.status(403);
+  }
   let vote = (req.params.vote == "true") ? true : false;
   console.log();
   let aux = [userId, guideId, +vote];
@@ -287,14 +321,24 @@ app.get('/vote/:vote', function (req, res) {
   });
 });
 
-app.get('/tag/:transaction', function (req, res) {
+app.get('/tag/:transaction', async (req, res)=> {
   const gameId = req.get('gameId');
   const userId = req.get('userId');
   const achievementId = req.get('achievementId');
   const type = req.get('type');
   const tag = req.get('tag');
 
+
+
   if (req.params.transaction == "add") {
+    const ban = await checkIfBan(userId);
+    const banAppeal = await checkIfBanAppeal(userId);
+    if (banAppeal) {
+      res.status(401)
+    }
+    if (ban) {
+      res.status(403)
+    }
     addTag(res, gameId, userId, achievementId, type, tag);
   } else {
     readTag(res, gameId, achievementId);
@@ -302,6 +346,7 @@ app.get('/tag/:transaction', function (req, res) {
 });
 
 function addTag(res, gameId, userId, achievementId, type, tag) {
+ 
   let col, table;
   if (type == "dlc") {
     col = "link";
@@ -500,10 +545,10 @@ app.get("/unban/:userId", async (req, res) => {
   connection.query(sql, (err, result) => {
     if (err) throw err;
     const sql2 = `update users set ban = NULL where userId = ${userId}`
-    connection.query(sql2, (err, result2)=>{
+    connection.query(sql2, (err, result2) => {
       res.send(true)
     });
-    
+
   });
 })
 
@@ -539,7 +584,7 @@ const job = schedule.scheduleJob('*/20 * * * *', async (req, res) => {
   //4 upload temainign users stats
   for (let i = 0; i < users.length; i++) {
     if (users[i].ban == null) {
-      console.log("uploading stats of: "+ users[i].userId)
+      console.log("uploading stats of: " + users[i].userId)
       await uploadUserStats(users[i].userId, users[i].platform);
     }
   }
@@ -568,7 +613,7 @@ function banUsers(banIds) {
     const sql = "delete from users where userId IN  (?)"
     connection.query(sql, [banIds], (err, res) => {
       if (err) { resolve(false); throw err };
-        resolve(true);
+      resolve(true);
     });
   });
 }

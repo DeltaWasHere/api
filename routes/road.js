@@ -2,6 +2,8 @@ const express = require('express');
 let bodyParser = require('body-parser');
 const router = express.Router();
 const request = require('request');
+const { checkIfBan, checkIfBanAppeal } = require("../utils/checkIfBan");
+
 
 module.exports = (connection) => {
     router.post('/:transaction', bodyParser.json(), function (req, res) {
@@ -21,9 +23,20 @@ module.exports = (connection) => {
 
     async function road(res, transaction, gameId, userId, roadId, steps, spoilers, rate) {
         let status = false;
+        let ban, banAppeal;
         console.log("doing: " + transaction)
         switch (transaction) {
             case "add":
+                ban = await checkIfBan(userId);
+                banAppeal = await checkIfBanAppeal(userId);
+                if (banAppeal) {
+                    res.status(401)
+                }
+                if (ban) {
+                    res.status(403)
+                }
+
+
                 roadId = await addRoad(userId, gameId, JSON.stringify(steps), spoilers);
                 if (roadId != null) {
 
@@ -65,6 +78,16 @@ module.exports = (connection) => {
                 //multiple roads single
                 break;
             case "rate":
+                ban = await checkIfBan(userId);
+                banAppeal = await checkIfBanAppeal(userId);
+                if (banAppeal) {
+                    res.status(401)
+                }
+                if (ban) {
+                    res.status(403)
+                }
+
+
                 status = await rateRoad(userId, roadId, rate);
                 break;
             case "publish":
