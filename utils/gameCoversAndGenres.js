@@ -29,10 +29,14 @@ function getGamesCoverAndGenres(title) {
             break;
           }
         }
-  
-        game.cover.url = game.cover.url.replace("//", "https://");
-        game.cover.url = game.cover.url.replace("thumb", "cover_big");
-        extraGameInfo.push(game.cover.url);
+  if(body.length>0){
+    game.cover.url = game.cover.url.replace("//", "https://");
+    game.cover.url = game.cover.url.replace("thumb", "cover_big");
+    extraGameInfo.push(game.cover.url);
+  }else{
+    extraGameInfo.push("https://images.igdb.com/igdb/image/upload/t_cover_big/co50nz.png");
+  }
+        
         let gameGenres = [];
         if (!(game.genres === undefined)) {
           for (let i = 0; i < game.genres.length; i++) {
