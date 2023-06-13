@@ -109,10 +109,10 @@ module.exports = (connection, storage) => {
         if (req.body.interestedGameId1 !== "" || req.body.interestedGameId1 != undefined || req.body.interestedGameId1 != "null") {
           gamesToCkeck.push(req.body.interestedGameId1)
         }
-        if (req.body.interestedGameId2 !== "" || req.body.interestedGameId2 != undefined || req.body.interestedGameId1 != "null") {
+        if (req.body.interestedGameId2 !== "" || req.body.interestedGameId2 != undefined || req.body.interestedGameId2 != "null") {
           gamesToCkeck.push(req.body.interestedGameId2)
         }
-        if (req.body.interestedGameId3 !== "" || req.body.interestedGameId3 != undefined || req.body.interestedGameId1 != "null") {
+        if (req.body.interestedGameId3 !== "" || req.body.interestedGameId3 != undefined || req.body.interestedGameId2 != "null") {
           gamesToCkeck.push(req.body.interestedGameId3)
         }
         if (!(await checkIfGamesExists(gamesToCkeck))) {
