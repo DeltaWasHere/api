@@ -99,10 +99,12 @@ module.exports = (connection, storage) => {
         ban = await checkIfBan(userId);
         banAppeal = await checkIfBanAppeal(userId);
         if (banAppeal) {
-          res.status(401).end()
+          res.status(401).end();
+          return;
         }
         if (ban) {
-          res.status(403).end()
+          res.status(403).end();
+          return;
         }
         let gamesToCkeck = [];
         gamesToCkeck.push(req.body.gameId);
@@ -117,6 +119,7 @@ module.exports = (connection, storage) => {
         }
         if (!(await checkIfGamesExists(gamesToCkeck))) {
           res.status(406).end();
+          return;
         }
 
         console.log(req.body);
