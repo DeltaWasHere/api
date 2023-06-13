@@ -36,8 +36,7 @@ function getGamesCoverAndGenres(title) {
   }else{
     extraGameInfo.push("https://images.igdb.com/igdb/image/upload/t_cover_big/co50nz.png");
   }
-        
-  
+
         let gameGenres = [];
         if (game.genres != undefined && game.genres.length>0 &&game.genres!=null) {
           for (let i = 0; i < game.genres.length; i++) {
