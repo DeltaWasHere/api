@@ -123,7 +123,7 @@ app.get("/auth/steam/authenticate", async (req, res) => {
   try {
     //retreieve user auth data
     const user = await steam.authenticate(req);
-    const ban = await checkIfBan(userId);
+
     const banAppeal = await checkIfBanAppeal(userId);
     
     console.log(user.username)
@@ -141,6 +141,7 @@ app.get("/auth/steam/authenticate", async (req, res) => {
 
     
     if (!ban) {
+      const ban = await checkIfBan(user.steamid);
       uploadUserStats(user.steamid, "steam");
     }
     
@@ -154,7 +155,6 @@ app.get("/auth/:userId", async (req, res) => {
   let userId = req.params.userId;
   console.log(userId);
   const ban = await checkIfBan(userId);
-  const banAppeal = await checkIfBanAppeal(userId);
   if (banAppeal) {
     res.status(401).end();
     return;
@@ -172,7 +172,7 @@ app.get("/auth/:userId", async (req, res) => {
 
 app.get("/xbox/auth/grant", async (req, res) => {
   let code = req.query.code;
-  const ban = await checkIfBan(userId);
+ 
   console.log(code);
   request.post({
     headers: {
@@ -184,7 +184,7 @@ app.get("/xbox/auth/grant", async (req, res) => {
       app_key: '8cd2a5fd-60b6-493a-944b-678eb528d32f'
     },
     json: true
-  }, function (error, response, body) {
+  }, async (error, response, body)=> {
     if (error) throw error;
     let userId = body.xuid;
     let avatar = body.avatar;
@@ -198,7 +198,7 @@ app.get("/xbox/auth/grant", async (req, res) => {
     avatar = avatar + "&format=png"
     let name = body.gamertag;
     res.redirect(`https://web-app-a17c6.web.app/auth/${userId}`);
-
+    const ban = await checkIfBan(userId);
     if (!ban) {
      
       uploadUserStats(userId, "xbox");
