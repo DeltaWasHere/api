@@ -415,6 +415,7 @@ async function addNonRecordeddGame(response, gameId, platform) {
 
     if (status == true) {
       response.end();
+      return;
     }
   }
 
