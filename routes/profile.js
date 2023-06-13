@@ -22,7 +22,7 @@ module.exports = (connection) => {
     let status = await checkUserExitance(userId);
     console.log(status)
     if (status !== true) {
-      res.send(status);
+      
       const ban = await checkIfBan(userId);
       const banAppeal = await checkIfBanAppeal(userId);
       if (banAppeal) {
@@ -33,9 +33,10 @@ module.exports = (connection) => {
         res.status(403).end();
         return;
       }
-
+      
       try {
         await uploadUserStats(userId, platform);
+        res.send(status);
       } catch (err) {
         throw err;
       }
