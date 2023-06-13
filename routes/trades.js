@@ -115,7 +115,7 @@ module.exports = (connection, storage) => {
         if (req.body.interestedGameId3 !== "" || req.body.interestedGameId3 != undefined) {
           gamesToCkeck.push(req.body.interestedGameId3)
         }
-        if (!checkIfGamesExists(gamesToCkeck)) {
+        if (!(await checkIfGamesExists(gamesToCkeck))) {
           res.status(406);
         }
 
