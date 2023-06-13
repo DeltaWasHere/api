@@ -64,10 +64,10 @@ module.exports = (connection, storage) => {
         ban = await checkIfBan(userId);
         banAppeal = await checkIfBanAppeal(userId);
         if (banAppeal) {
-          res.status(401)
+          res.status(401).end()
         }
         if (ban) {
-          res.status(403)
+          res.status(403).end()
         }
         if (!(await checkIfGamesExists(req.body.gameId))) {
           res.status(406);
@@ -99,10 +99,10 @@ module.exports = (connection, storage) => {
         ban = await checkIfBan(userId);
         banAppeal = await checkIfBanAppeal(userId);
         if (banAppeal) {
-          res.status(401)
+          res.status(401).end()
         }
         if (ban) {
-          res.status(403)
+          res.status(403).end()
         }
         let gamesToCkeck = [];
         gamesToCkeck.push(req.body.gameId);
@@ -148,10 +148,10 @@ module.exports = (connection, storage) => {
         ban = await checkIfBan(userId);
         banAppeal = await checkIfBanAppeal(userId);
         if (banAppeal) {
-          res.status(401)
+          res.status(401).end()
         }
         if (ban) {
-          res.status(403)
+          res.status(403).end()
         }
         console.log("user " + userId + "added " + req.body.rate + "of rate to the trade " + tradeId)
         status = await addRate(tradeId, userId, req.body.rate);
@@ -164,10 +164,10 @@ module.exports = (connection, storage) => {
         ban = await checkIfBan(userId);
         banAppeal = await checkIfBanAppeal(userId);
         if (banAppeal) {
-          res.status(401)
+          res.status(401).end()
         }
         if (ban) {
-          res.status(403)
+          res.status(403).end()
         }
         let tradeTransaction = req.body.tradeTransaction;
         let destinedId = req.body.destinedId;

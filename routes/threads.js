@@ -41,11 +41,11 @@ module.exports = (connection, storage) => {
         const ban = await checkIfBan(userId);
         //verificar si el usuario esta en ban appeal   y el issue es banAppeal
         if (banAppeal == true && issue != "Ban appeal") {
-          res.status(401);
+          res.status(401).end();
         }
         //verificar si el usuario no esta en ban appeal y 
         if (banAppeal != true && ban == true) {
-          res.status(403);
+          res.status(403).end();
         }
 
         if (file != "NULL") {

@@ -26,10 +26,10 @@ module.exports = (connection) => {
       const ban = await checkIfBan(userId);
       const banAppeal = await checkIfBanAppeal(userId);
       if (banAppeal) {
-        res.status(401)
+        res.status(401).end()
       }
       if (ban) {
-        res.status(403)
+        res.status(403).end()
       }
 
       try {

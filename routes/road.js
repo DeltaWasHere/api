@@ -30,10 +30,10 @@ module.exports = (connection) => {
                 ban = await checkIfBan(userId);
                 banAppeal = await checkIfBanAppeal(userId);
                 if (banAppeal) {
-                    res.status(401)
+                    res.status(401).end()
                 }
                 if (ban) {
-                    res.status(403)
+                    res.status(403).end()
                 }
 
 
@@ -81,10 +81,10 @@ module.exports = (connection) => {
                 ban = await checkIfBan(userId);
                 banAppeal = await checkIfBanAppeal(userId);
                 if (banAppeal) {
-                    res.status(401)
+                    res.status(401).end()
                 }
                 if (ban) {
-                    res.status(403)
+                    res.status(403).end()
                 }
 
 
