@@ -122,10 +122,7 @@ app.get("/steam/auth", async (req, res) => {
 app.get("/auth/steam/authenticate", async (req, res) => {
   try {
     //retreieve user auth data
-    const user = await steam.authenticate(req);
-
-    const banAppeal = await checkIfBanAppeal(userId);
-    
+    const user = await steam.authenticate(req);    
     console.log(user.username)
     userauthinfo = {
       userId: user.steamid,
