@@ -123,6 +123,9 @@ app.get("/auth/steam/authenticate", async (req, res) => {
   try {
     //retreieve user auth data
     const user = await steam.authenticate(req);
+    const ban = await checkIfBan(userId);
+    const banAppeal = await checkIfBanAppeal(userId);
+    
     console.log(user.username)
     userauthinfo = {
       userId: user.steamid,
@@ -136,8 +139,11 @@ app.get("/auth/steam/authenticate", async (req, res) => {
     res.redirect(`https://web-app-a17c6.web.app/auth/${user.steamid}`);
 
 
-
-    uploadUserStats(user.steamid, "steam");
+    
+    if (!ban) {
+      uploadUserStats(user.steamid, "steam");
+    }
+    
 
   } catch (error) {
     console.error(error);
@@ -166,6 +172,7 @@ app.get("/auth/:userId", async (req, res) => {
 
 app.get("/xbox/auth/grant", async (req, res) => {
   let code = req.query.code;
+  const ban = await checkIfBan(userId);
   console.log(code);
   request.post({
     headers: {
@@ -192,8 +199,11 @@ app.get("/xbox/auth/grant", async (req, res) => {
     let name = body.gamertag;
     res.redirect(`https://web-app-a17c6.web.app/auth/${userId}`);
 
-
-    uploadUserStats(userId, "xbox");
+    if (!ban) {
+     
+      uploadUserStats(userId, "xbox");
+    }
+    
   });
 
 });
