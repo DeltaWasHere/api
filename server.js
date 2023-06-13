@@ -56,7 +56,7 @@ app.use(function (req, res, next) {
 
 app.use((req, res, next) => {
   if (isMaintenance) {
-    return res.status(503);
+    return res.status(503).send("Server in maintenance");
   }
   next();
 })
