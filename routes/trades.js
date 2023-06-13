@@ -70,7 +70,7 @@ module.exports = (connection, storage) => {
           res.status(403).end()
         }
         if (!(await checkIfGamesExists(req.body.gameId))) {
-          res.status(406);
+          res.status(406).end();
         }
 
         if (req.file === undefined) {
@@ -116,7 +116,7 @@ module.exports = (connection, storage) => {
           gamesToCkeck.push(req.body.interestedGameId3)
         }
         if (!(await checkIfGamesExists(gamesToCkeck))) {
-          res.status(406);
+          res.status(406).end();
         }
 
         console.log(req.body);
