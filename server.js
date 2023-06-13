@@ -136,9 +136,9 @@ app.get("/auth/steam/authenticate", async (req, res) => {
     res.redirect(`https://web-app-a17c6.web.app/auth/${user.steamid}`);
 
 
-    
+    const ban = await checkIfBan(user.steamid);
     if (!ban) {
-      const ban = await checkIfBan(user.steamid);
+     
       uploadUserStats(user.steamid, "steam");
     }
     
