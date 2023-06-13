@@ -533,7 +533,7 @@ function getNoAchievementGame(ownedGame) {
         console.log("Game with no .game ")
         resolve(false);
       } else {
-        if (parsedResponse.game.availableGameStats.achievements != undefined || parsedResponse.game.availableGameStats.achievements != null) {
+        if (parsedResponse.game.availableGameStats.achievements == undefined || parsedResponse.game.availableGameStats.achievements == null) {
           console.log("it does not have achievements");
           resolve(true);
         } else {
