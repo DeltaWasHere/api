@@ -69,6 +69,9 @@ module.exports = (connection, storage) => {
         if (ban) {
           res.status(403)
         }
+        if (!checkIfGamesExists(req.body.gameId)) {
+          res.status(406);
+        }
 
         if (req.file === undefined) {
           req.body.media = "NULL";
@@ -88,9 +91,7 @@ module.exports = (connection, storage) => {
           status = await addOffer(req.body);
         }
 
-        if (!checkIfGamesExists(req.body.gameId)) {
-          res.status(406);
-        }
+       
         res.send(status);
         break;
 
@@ -102,6 +103,20 @@ module.exports = (connection, storage) => {
         }
         if (ban) {
           res.status(403)
+        }
+        let gamesToCkeck = [];
+        gamesToCkeck.push(req.body.gameId);
+        if (req.body.interestedGameId1 !== "" || req.body.interestedGameId1 != undefined) {
+          gamesToCkeck.push(req.body.interestedGameId1)
+        }
+        if (req.body.interestedGameId2 !== "" || req.body.interestedGameId2 != undefined) {
+          gamesToCkeck.push(req.body.interestedGameId2)
+        }
+        if (req.body.interestedGameId3 !== "" || req.body.interestedGameId3 != undefined) {
+          gamesToCkeck.push(req.body.interestedGameId3)
+        }
+        if (!checkIfGamesExists(gamesToCkeck)) {
+          res.status(406);
         }
 
         console.log(req.body);
@@ -120,20 +135,7 @@ module.exports = (connection, storage) => {
           req.body.media = mediaPath;
           req.body.media = req.body.media.replace("\\", "\\\\");
         }
-        let gamesToCkeck = [];
-        gamesToCkeck.push(req.body.gameId);
-        if (req.body.interestedGameId1 !== "" || req.body.interestedGameId1 != undefined) {
-          gamesToCkeck.push(req.body.interestedGameId1)
-        }
-        if (req.body.interestedGameId2 !== "" || req.body.interestedGameId2 != undefined) {
-          gamesToCkeck.push(req.body.interestedGameId2)
-        }
-        if (req.body.interestedGameId3 !== "" || req.body.interestedGameId3 != undefined) {
-          gamesToCkeck.push(req.body.interestedGameId3)
-        }
-        if (!checkIfGamesExists(gamesToCkeck)) {
-          res.status(406);
-        }
+       
 
         status = await addTrade(req.body);
 
