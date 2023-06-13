@@ -37,8 +37,11 @@ module.exports = (connection) => {
       try {
         res.send(status);
         await uploadUserStats(userId, platform);
+        return;
       } catch (err) {
         throw err;
+        return;
+
       }
     }
     switch (transaction) {
