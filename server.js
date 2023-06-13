@@ -152,10 +152,6 @@ app.get("/auth/:userId", async (req, res) => {
   let userId = req.params.userId;
   console.log(userId);
   const ban = await checkIfBan(userId);
-  if (banAppeal) {
-    res.status(401).end();
-    return;
-  }
   if (ban) {
     res.status(403).end();
     return;
