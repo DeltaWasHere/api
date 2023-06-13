@@ -61,6 +61,7 @@ app.use((req, res, next) => {
   next();
 })
 
+
 const firebaseConfig = {
   apiKey: process.env.APIKEY,
   authDomain: process.env.AUTHDOMAIN,
