@@ -42,10 +42,12 @@ module.exports = (connection, storage) => {
         //verificar si el usuario esta en ban appeal   y el issue es banAppeal
         if (banAppeal == true && issue != "Ban appeal") {
           res.status(401).end();
+          return;
         }
         //verificar si el usuario no esta en ban appeal y 
         if (banAppeal != true && ban == true) {
           res.status(403).end();
+          return;
         }
 
         if (file != "NULL") {

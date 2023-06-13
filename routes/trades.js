@@ -64,13 +64,16 @@ module.exports = (connection, storage) => {
         ban = await checkIfBan(userId);
         banAppeal = await checkIfBanAppeal(userId);
         if (banAppeal) {
-          res.status(401).end()
+          res.status(401).end();
+          return;
         }
         if (ban) {
-          res.status(403).end()
+          res.status(403).end();
+          return;
         }
         if (!(await checkIfGamesExists(req.body.gameId))) {
           res.status(406).end();
+          return;
         }
 
         if (req.file === undefined) {
@@ -151,10 +154,12 @@ module.exports = (connection, storage) => {
         ban = await checkIfBan(userId);
         banAppeal = await checkIfBanAppeal(userId);
         if (banAppeal) {
-          res.status(401).end()
+          res.status(401).end();
+          return;
         }
         if (ban) {
-          res.status(403).end()
+          res.status(403).end();
+          return;
         }
         console.log("user " + userId + "added " + req.body.rate + "of rate to the trade " + tradeId)
         status = await addRate(tradeId, userId, req.body.rate);
@@ -167,10 +172,12 @@ module.exports = (connection, storage) => {
         ban = await checkIfBan(userId);
         banAppeal = await checkIfBanAppeal(userId);
         if (banAppeal) {
-          res.status(401).end()
+          res.status(401).end();
+          return;
         }
         if (ban) {
-          res.status(403).end()
+          res.status(403).end();
+          return;
         }
         let tradeTransaction = req.body.tradeTransaction;
         let destinedId = req.body.destinedId;

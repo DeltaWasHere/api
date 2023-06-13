@@ -141,10 +141,12 @@ app.get("/auth/:userId", async (req, res) => {
   const ban = await checkIfBan(userId);
   const banAppeal = await checkIfBanAppeal(userId);
   if (banAppeal) {
-    res.status(401).end()
+    res.status(401).end();
+    return;
   }
   if (ban) {
-    res.status(403).end()
+    res.status(403).end();
+    return;
   }
   connection.query(`select * from users where userId =${userId}`, (err, response) => {
     if (err) throw err;
@@ -258,10 +260,12 @@ app.get('/rate/:gameid', async (req, res) => {
   const ban = await checkIfBan(userId);
   const banAppeal = await checkIfBanAppeal(userId);
   if (banAppeal) {
-    res.status(401).end()
+    res.status(401).end();
+    return;
   }
   if (ban) {
-    res.status(403).end()
+    res.status(403).end();
+    return;
   }
   res.end();
   let sql = 'update usersgame set rate = ' + rate + ' where userId=' + userId + ' and gameId = ' + gameId;
@@ -274,10 +278,12 @@ app.get('/pin/:userId', async (req, res) => {
   const ban = await checkIfBan(userId);
   const banAppeal = await checkIfBanAppeal(userId);
   if (banAppeal) {
-    res.status(401).end()
+    res.status(401).end();
+    return;
   }
   if (ban) {
-    res.status(403).end()
+    res.status(403).end();
+    return;
   }
   let sqlSelec = 'select * from pin where userId = ' + userId + ' and gameId = ' + gameId;
   let sqlIn = 'insert into pin (userId, gameId) values (?)';
@@ -303,9 +309,11 @@ app.get('/vote/:vote', async (req, res) => {
   const banAppeal = await checkIfBanAppeal(userId);
   if (banAppeal) {
     res.status(401).end();
+    return;
   }
   if (ban) {
     res.status(403).end();
+    return;
   }
   let vote = (req.params.vote == "true") ? true : false;
   console.log();
@@ -334,10 +342,12 @@ app.get('/tag/:transaction', async (req, res) => {
     const ban = await checkIfBan(userId);
     const banAppeal = await checkIfBanAppeal(userId);
     if (banAppeal) {
-      res.status(401).end()
+      res.status(401).end();
+      return;
     }
     if (ban) {
-      res.status(403).end()
+      res.status(403).end();
+      return;
     }
     addTag(res, gameId, userId, achievementId, type, tag);
   } else {
