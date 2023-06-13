@@ -9,6 +9,7 @@ let SteamAuth = require("node-steam-openid");
 const { checkIfBan, checkIfBanAppeal } = require("./utils/checkIfBan");
 const cors = require('cors');
 let puppeteer = require('puppeteer');
+let isMaintenance = false;
 const multer = require('multer');
 const { createProxyMiddleware } = require('http-proxy-middleware')
 const { authenticate } = require('@xboxreplay/xboxlive-auth');
@@ -52,6 +53,13 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
+app.use((req, res, next) => {
+  if (isMaintenance) {
+    return res.status(503);
+  }
+  next();
+})
 
 const firebaseConfig = {
   apiKey: process.env.APIKEY,
@@ -594,7 +602,8 @@ app.get("/unban/:userId", async (req, res) => {
 })
 
 
-const job = schedule.scheduleJob('*/2 * * * *', async (req, res) => {
+const job = schedule.scheduleJob('*/5 * * * *', async (req, res) => {
+  isMaintenance = true;
   console.log("Running daily schedule");
 
   //1 get thte users
@@ -634,9 +643,11 @@ const job = schedule.scheduleJob('*/2 * * * *', async (req, res) => {
     connection.query("CALL calculateGlobalScore", (err) => {
       if (err) throw err;
       console.log("global score recalculated");
+      isMaintenance=false;
     });
   } catch (error) {
     console.error("Error calling stored procedure:", error);
+    isMaintenance=false;
   }
 });
 
