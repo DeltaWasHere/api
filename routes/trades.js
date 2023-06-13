@@ -316,7 +316,7 @@ module.exports = (connection, storage) => {
 
   function checkIfGamesExists(gamesIds) {
     return new Promise((resolve, reject) => {
-      const sql = "select from games IN(?)"
+      const sql = "select from games WHERE IN(?)"
       connection.query(sql,[gamesIds], (err, result) => {
         if (err) throw err;
         if (gamesIds.length == result.length) {
