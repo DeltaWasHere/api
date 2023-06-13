@@ -530,12 +530,16 @@ function getNoAchievementGame(ownedGame) {
     request(url, (err, res, body) => {
       let parsedResponse = JSON.parse(body);
       if (Object.keys(parsedResponse.game).length == 0) {
+        console.log("Game with no .game ")
         resolve(false);
       } else {
-        if (parsedResponse.availableGameStats.achievements != undefined && parsedResponse.availableGameStats.achievements != null) {
+        if (parsedResponse.game.availableGameStats.achievements != undefined && parsedResponse.game.availableGameStats.achievements != null) {
+          console.log("it does not have achievements");
           resolve(true);
+        } else {
+          resolve(false);
+          console.log("it does have achievements");
         }
-        resolve(false);
       }
     });
   });
