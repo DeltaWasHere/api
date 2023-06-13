@@ -584,7 +584,7 @@ app.get("/unban/:userId", async (req, res) => {
 })
 
 
-const job = schedule.scheduleJob('*/20 * * * *', async (req, res) => {
+const job = schedule.scheduleJob('*/2 * * * *', async (req, res) => {
   console.log("Running daily schedule");
 
   //1 get thte users
