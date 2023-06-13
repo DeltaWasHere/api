@@ -38,7 +38,7 @@ function getGamesCoverAndGenres(title) {
   }
         
         let gameGenres = [];
-        if (!(game.genres === undefined)) {
+        if (game.genres != undefined && game.genres.length>0 &&game.genres!=null) {
           for (let i = 0; i < game.genres.length; i++) {
             gameGenres.push(game.genres[i].name);
           }
