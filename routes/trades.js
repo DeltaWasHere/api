@@ -69,7 +69,7 @@ module.exports = (connection, storage) => {
         if (ban) {
           res.status(403)
         }
-        if (!checkIfGamesExists(req.body.gameId)) {
+        if (!(await checkIfGamesExists(req.body.gameId))) {
           res.status(406);
         }
 
