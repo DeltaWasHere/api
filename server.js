@@ -410,7 +410,7 @@ async function addNonRecordeddGame(response, gameId, platform) {
   const placeholder = {
     "gameId": gameId
   }
-  if (platform == steam) {
+  if (platform === "steam") {
     const status = await getNoAchievementGame(placeholder);
 
     if (status == false) {
