@@ -588,6 +588,7 @@ function getOwnedGames(userid, platform) {
       }
       //request to get the achievements of certain gameId
       request({ headers: headers, uri: url }, function (err, response, body) {
+        if(err) throw err;
         responseParsed = JSON.parse(body);
   
         let achievements = [], unlocktime, id, achieved, achievedCondition;
