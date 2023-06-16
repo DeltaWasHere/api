@@ -134,7 +134,7 @@ module.exports = (connection, storage) => {
 
   function addThreadResponse(threadId, content) {
     return new Promise((resolve, reject) => {
-      let sql = 'insert into threadResponse (threadId, content) VALUES (?)';
+      let sql = 'insert into threadresponse (threadId, content) VALUES (?)';
       let array = [threadId, content];
       connection.query(sql, [array], (error, result) => {
         if (error) {
