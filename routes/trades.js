@@ -71,7 +71,7 @@ module.exports = (connection, storage) => {
           res.status(403).end();
           return;
         }
-        if (!(await checkIfGamesExists(req.body.gameId))) {
+        if (!(await checkIfGamesExists([req.body.gameId]))) {
           res.status(406).end();
           return;
         }
