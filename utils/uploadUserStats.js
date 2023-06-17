@@ -593,11 +593,14 @@ function getUnlockedAchievementsForGameId(userId, gameId, platform) {
 
     }
     //request to get the achievements of certain gameId
-    console.log(url);
     request({ headers: headers, uri: url }, function (err, response, body) {
       if (err) throw err;
+      try{
       responseParsed = JSON.parse(body);
-
+      }catch(error){
+        console.log("ERROIR:")
+        console.log(body)
+      }
       let achievements = [], unlocktime, id, achieved, achievedCondition;
       switch (platform) {
         case "xbox":
