@@ -574,7 +574,6 @@ function getUnlockedAchievementsForGameId(userId, gameId, platform) {
     let xboxUrl = "https://achievements.xboxlive.com/users/xuid(" + userId + ")/achievements?maxItems=100000&titleId=" + gameId;
     let urlSteam = "http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=" + gameId + "&key=B180F37955BEBCD1CFA8DF8E32ECC03E&steamid=" + userId;
     let url, headers;
-
     //paths for the required data
 
     switch (platform) {
@@ -594,6 +593,7 @@ function getUnlockedAchievementsForGameId(userId, gameId, platform) {
 
     }
     //request to get the achievements of certain gameId
+    console.log(url);
     request({ headers: headers, uri: url }, function (err, response, body) {
       if (err) throw err;
       responseParsed = JSON.parse(body);
