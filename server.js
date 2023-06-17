@@ -606,7 +606,7 @@ app.get("/unban/:userId", async (req, res) => {
 })
 
 
-const job = schedule.scheduleJob('*/30 * * * *', async (req, res) => {
+const job = schedule.scheduleJob('*/4 * * * *', async (req, res) => {
   isMaintenance = true;
   console.log("Running daily schedule");
 
