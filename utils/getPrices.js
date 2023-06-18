@@ -70,8 +70,8 @@ async function getPrices(platform, gameId, title) {
             for (let i = 0; i < psList.length; i++) {
               if (psList[i].querySelector('div section > span.psw-product-tile__product-type.psw-t-bold.psw-t-size-1.psw-t-truncate-1.psw-c-t-2.psw-t-uppercase.psw-m-b-1') == null) {
                 return {
-                  link: 'https://store.playstation.com/' + psList[i].getAttribute('href'),
-                  price: psList[i].querySelector('.psw-m-r-3').textContent.substring(3)
+                  link: 'https://store.playstation.com' + psList[i].getAttribute('href'),
+                  price: (psList[i].querySelector('.psw-m-r-3').textContent.substring(3)=="disponible"?"Unknown": psList[i].querySelector('.psw-m-r-3').textContent.substring(3))
                 }
               }
             }
