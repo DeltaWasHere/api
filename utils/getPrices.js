@@ -44,7 +44,7 @@ async function getPrices(platform, gameId, title) {
         await page.screenshot({ path: 'webos.jpg' });
         //await page.waitForSelector('.m-product-placement-item.f-size-medium.context-game.gameDiv', { visible: true });
   
-        itemData = await page.evaluate(() => {
+        itemData[0] = await page.evaluate(() => {
           let firstItem = document.querySelector('.m-product-placement-item.f-size-medium.context-game.gameDiv');
           let anchorLink = firstItem.querySelector(".gameDivLink");
           return {
@@ -64,14 +64,14 @@ async function getPrices(platform, gameId, title) {
         try {
           await page.waitForSelector(itemPath.get(platform));
   
-          itemData = await page.evaluate((itemPath) => {
+          itemData[0] = await page.evaluate((itemPath) => {
   
             let psList = document.querySelectorAll(itemPath);
             for (let i = 0; i < psList.length; i++) {
               if (psList[i].querySelector('div section > span.psw-product-tile__product-type.psw-t-bold.psw-t-size-1.psw-t-truncate-1.psw-c-t-2.psw-t-uppercase.psw-m-b-1') == null) {
                 return {
                   link: 'https://store.playstation.com' + psList[i].getAttribute('href'),
-                  price: (psList[i].querySelector('.psw-m-r-3').textContent.substring(3)=="disponible"?"Unknown": psList[i].querySelector('.psw-m-r-3').textContent.substring(3))
+                  price: (psList[i].querySelector('.psw-m-r-3').textContent.substring(3)=="disponible"?"unknown": psList[i].querySelector('.psw-m-r-3').textContent.substring(3))
                 }
               }
             }
@@ -80,7 +80,7 @@ async function getPrices(platform, gameId, title) {
         } catch (error) {
           console.log("Error while getting the price for platform: " + platform);
           itemData.push({
-            price: "Unknown",
+            price: "unknown",
             link: pagesMap.get(platform)
           })
         }
