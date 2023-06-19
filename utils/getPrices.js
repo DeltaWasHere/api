@@ -54,6 +54,7 @@ async function getPrices(platform, gameId, title) {
         });
       } catch (error) {
         console.log("Error while getting the price for  platform: " + platform)
+        console.log(error);
         itemData.push({
           price: "Unknown",
           link: pagesMap.get(platform)
