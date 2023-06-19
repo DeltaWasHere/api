@@ -29,7 +29,7 @@ async function getPrices(platform, gameId, title) {
     if (platform == "xbox") {
       //wait for the first games to appear
       try {
-        await page.waitForSelector('.m-product-placement-item.f-size-medium.context-game.gameDiv');
+
   
         //wait for the input and write on it
         await page.waitForSelector('.c-search.xghsearch input');
