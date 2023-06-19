@@ -41,8 +41,8 @@ async function getPrices(platform, gameId, title) {
         //wait 5 secs after clicking
         await page.click('.c-search.xghsearch button');       
 
-        await page.waitForSelector('.gameDivsWrapper');
-        console.log(await page.$eval('.gameDivsWrapper', element => element))
+        await page.waitForSelector('.gameDivsWrapper div');
+        console.log(await page.$eval('.gameDivsWrapper div', element => element))
         
         itemData[0] = await page.evaluate(() => {
           let firstItem = document.querySelector('.m-product-placement-item.f-size-medium.context-game.gameDiv');
