@@ -29,8 +29,8 @@ async function getPrices(platform, gameId, title) {
     if (platform == "xbox") {
       //wait for the first games to appear
       try {
-
-    
+        await page.waitForSelector('.m-product-placement-item.f-size-medium.context-game.gameDiv');
+  
         //wait for the input and write on it
         await page.waitForSelector('.c-search.xghsearch input');
         await page.type('.c-search.xghsearch input', title);
@@ -39,13 +39,11 @@ async function getPrices(platform, gameId, title) {
         await page.waitForSelector('.c-search.xghsearch button');
   
         //wait 5 secs after clicking
-        await page.click('.c-search.xghsearch button');       
-        await page.waitForSelector('.gameDivsWrapper.gdSorting');
-        await page.waitForSelector('.gameDivsWrapper');
-
-       
-        console.log(await page.$eval('.gameDivsWrapper div', element => element))
-        
+        await page.click('.c-search.xghsearch button');
+        await delay(5000);
+        await page.screenshot({ path: 'webos.jpg' });
+        //await page.waitForSelector('.m-product-placement-item.f-size-medium.context-game.gameDiv', { visible: true });
+  
         itemData[0] = await page.evaluate(() => {
           let firstItem = document.querySelector('.m-product-placement-item.f-size-medium.context-game.gameDiv');
           let anchorLink = firstItem.querySelector(".gameDivLink");
