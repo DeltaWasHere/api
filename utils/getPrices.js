@@ -30,7 +30,7 @@ async function getPrices(platform, gameId, title) {
       //wait for the first games to appear
       try {
 
-  
+        await page.waitForSelector('.gameDivsWrapper');
         //wait for the input and write on it
         await page.waitForSelector('.c-search.xghsearch input');
         await page.type('.c-search.xghsearch input', title);
@@ -42,7 +42,7 @@ async function getPrices(platform, gameId, title) {
         await page.click('.c-search.xghsearch button');       
         await page.waitForNavigation();
 
-        await page.waitForSelector('.gameDivsWrapper div');
+       
         console.log(await page.$eval('.gameDivsWrapper div', element => element))
         
         itemData[0] = await page.evaluate(() => {
