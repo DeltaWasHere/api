@@ -40,7 +40,7 @@ async function getPrices(platform, gameId, title) {
   
         //wait 5 secs after clicking
         await page.click('.c-search.xghsearch button');
-        await delay(5000);
+        await delay(10000);
         await page.screenshot({ path: 'webos.jpg' });
         //await page.waitForSelector('.m-product-placement-item.f-size-medium.context-game.gameDiv', { visible: true });
   
