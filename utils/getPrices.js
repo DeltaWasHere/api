@@ -40,6 +40,7 @@ async function getPrices(platform, gameId, title) {
   
         //wait 5 secs after clicking
         await page.click('.c-search.xghsearch button');       
+        await page.waitForNavigation();
 
         await page.waitForSelector('.gameDivsWrapper div');
         console.log(await page.$eval('.gameDivsWrapper div', element => element))
