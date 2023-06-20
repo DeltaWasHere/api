@@ -613,7 +613,7 @@ function getUnlockedAchievementsForGameId(userId, gameId, platform) {
         case "ps":
           achievements = responseParsed.trophies;
           unlocktime = "earnedDateTime";
-          id = "id";
+          id = "trophyId";
           achieved = "earned";
           achievedCondition = true;
           break;
