@@ -269,7 +269,7 @@ function getUserInfo(userid, platform) {
     } else {
       request({ headers: headers, uri: url }, function (err, res, body) {
         if (err) throw err;
-        // console.log(body);
+         console.log(body);
         parseResponse = JSON.parse(body);
 
         //  console.log(parseResponse);
