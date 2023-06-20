@@ -226,6 +226,7 @@ module.exports = (connection) => {
       console.log("url: " + url);
       request({ headers: headers, uri: url }, function (err, res, body) {
         if (err) throw err;
+      console.log(body);
         parsedResponse = JSON.parse(body);
         let achievements, pathIcon, pathDescription, pathId, pathName, achievementsData = [];
         switch (platform) {
