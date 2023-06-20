@@ -173,8 +173,11 @@ module.exports = (connection) => {
       "select achievementId, gameId, dateAchieved, rarity from achievements where userId = '" + userId + "' order by rarity ASC limit 5",
       "select achievementId, gameId, dateAchieved, rarity from achievements where userId = '" + userId + "' order by dateAchieved DESC limit 5"];
       connection.query(sql[0], (err1, res1) => {
+        if(err1) throw err1;
         connection.query(sql[1], (err2, res2) => {
+          if(err1) throw err2;
           connection.query(sql[2], (err3, res3) => {
+            if(err1) throw err3;
             profileData = {
               userId: userId,
               position: res1[0].position,
