@@ -81,8 +81,6 @@ module.exports = (connection) => {
           }
           totalAchievements = totalAchievements.concat(achievements);
         }
-        console.log(totalAchievements);
-
         //console.log(totalAchievements);
 
         for (let i = 0; i < profilePreview.valuableAchievements.length; i++) {
@@ -185,8 +183,9 @@ module.exports = (connection) => {
               avatar: res1[0].avatar,
               name: res1[0].name,
               valuableAchievements: res2,
-              recentAchievements: res3
+              recentAchievem
             }
+            console.log(profileData);
             resolve(profileData);
           });
         });
