@@ -228,8 +228,7 @@ module.exports = (connection) => {
         if (err) throw err;
    
         parsedResponse = JSON.parse(body);
-        console.log(parsedResponse);
-        let achievements, pathIcon, pathDescription, pathId, pathName, achievementsData = [];
+                let achievements, pathIcon, pathDescription, pathId, pathName, achievementsData = [];
         switch (platform) {
           case "steam":
             achievements = parsedResponse.game.availableGameStats.achievements;
@@ -263,6 +262,7 @@ module.exports = (connection) => {
             achieved: 0
           });
         }
+        console.log(achievementsData);
         resolve(achievementsData);
       });
     });
