@@ -22,7 +22,7 @@ module.exports = (connection) => {
     let status = await checkUserExitance(userId);
     console.log(status)
     if (status !== true) {
-      
+
       const ban = await checkIfBan(userId);
       const banAppeal = await checkIfBanAppeal(userId);
       if (banAppeal) {
@@ -33,7 +33,7 @@ module.exports = (connection) => {
         res.status(403).end();
         return;
       }
-      
+
       try {
         res.send(status);
         await uploadUserStats(userId, platform);
@@ -81,6 +81,7 @@ module.exports = (connection) => {
           }
           totalAchievements = totalAchievements.concat(achievements);
         }
+        console.log(totalAchievements);
 
         //console.log(totalAchievements);
 
@@ -226,9 +227,9 @@ module.exports = (connection) => {
       console.log("url: " + url);
       request({ headers: headers, uri: url }, function (err, res, body) {
         if (err) throw err;
-   
+
         parsedResponse = JSON.parse(body);
-                let achievements, pathIcon, pathDescription, pathId, pathName, achievementsData = [];
+        let achievements, pathIcon, pathDescription, pathId, pathName, achievementsData = [];
         switch (platform) {
           case "steam":
             achievements = parsedResponse.game.availableGameStats.achievements;
@@ -262,7 +263,6 @@ module.exports = (connection) => {
             achieved: 0
           });
         }
-        console.log(achievementsData);
         resolve(achievementsData);
       });
     });
