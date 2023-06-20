@@ -163,10 +163,12 @@ async function uploadUserStats(userid, platform) {
   for (let i = removalIndexes.length - 1; i >= 0; i--) {
     ownedGamesData.splice(removalIndexes[i], 1);
   }
+
   let achievementsPromises = [];
   for (let i = 0; i < ownedGamesData.length; i++) {
     achievementsPromises.push(getUnlockedAchievementsForGameId(userid, ownedGamesData[i][1], platform));
   }
+
   let achievements = await Promise.all(achievementsPromises).then(function (values) {
     return values.filter(function (value) {
       return typeof value !== 'undefined';
@@ -595,7 +597,7 @@ function getUnlockedAchievementsForGameId(userId, gameId, platform) {
     //request to get the achievements of certain gameId
     request({ headers: headers, uri: url }, function (err, response, body) {
       if (err) throw err;
-    
+
       responseParsed = JSON.parse(body);
    
       let achievements = [], unlocktime, id, achieved, achievedCondition;
@@ -663,6 +665,7 @@ function getUnlockedAchievementsForGameId(userId, gameId, platform) {
       if (count == earnedCount) {
         console.log(mostRecentDate.getTime());
       }
+      console.log(achievementsUnlocked);
       resolve(
         {
           "gameId": gameId,
