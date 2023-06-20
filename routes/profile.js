@@ -226,8 +226,9 @@ module.exports = (connection) => {
       console.log("url: " + url);
       request({ headers: headers, uri: url }, function (err, res, body) {
         if (err) throw err;
-      console.log(body);
+   
         parsedResponse = JSON.parse(body);
+        console.log(parsedResponse);
         let achievements, pathIcon, pathDescription, pathId, pathName, achievementsData = [];
         switch (platform) {
           case "steam":
