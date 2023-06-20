@@ -665,7 +665,6 @@ function getUnlockedAchievementsForGameId(userId, gameId, platform) {
       if (count == earnedCount) {
         console.log(mostRecentDate.getTime());
       }
-      console.log(achievementsUnlocked);
       resolve(
         {
           "gameId": gameId,
