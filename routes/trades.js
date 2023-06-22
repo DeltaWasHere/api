@@ -7,9 +7,6 @@ const request = require('request');
 const multer = require('multer');
 const { uploadBytes, ref, getDownloadURL } = require('firebase/storage')
 
-
-
-
 module.exports = (connection, storage) => {
   const uploadTrade = multer({ storage: multer.memoryStorage() });
   router.post('/:transaction', bodyParser.json(), uploadTrade.single('validation'), async (req, res) => {

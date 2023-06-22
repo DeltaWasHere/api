@@ -1,6 +1,5 @@
 let express = require('express');
 require('dotenv').config();
-let fs = require('fs');
 const schedule = require('node-schedule');
 const app = express();
 let request = require('request');
@@ -8,18 +7,8 @@ let bodyParser = require('body-parser');
 let SteamAuth = require("node-steam-openid");
 const { checkIfBan, checkIfBanAppeal } = require("./utils/checkIfBan");
 const cors = require('cors');
-let puppeteer = require('puppeteer');
 let isMaintenance = false;
-const multer = require('multer');
 const { createProxyMiddleware } = require('http-proxy-middleware')
-const { authenticate } = require('@xboxreplay/xboxlive-auth');
-const { exchangeCodeForAccessToken, exchangeNpssoForCode, makeUniversalSearch } = require('psn-api');
-const { resolve } = require('path');
-const path = require('path');
-const { platform, userInfo } = require('os');
-const { throws } = require('assert');
-const { response } = require('express');
-const { error } = require('console');
 const connection = require('./utils/connection');
 const { uploadUserStats } = require('./utils/uploadUserStats')
 const { addGames } = require('./utils/addGames')
@@ -28,7 +17,7 @@ const xboxHeaders = require('./utils/xboxHeaders')
 const psHeaders = require('./utils/psHeaders')
 const { getPrices } = require('./utils/getPrices');
 const { getGamesCoverAndGenres } = require('./utils/gameCoversAndGenres');
-const { uploadBytes, ref, getDownloadURL, getStorage } = require('firebase/storage')
+const { getStorage } = require('firebase/storage')
 //#region headers and BDConnection setup
 
 let xblHeaders = {
@@ -37,7 +26,7 @@ let xblHeaders = {
 }
 
 
-
+//prov not needed ngl.
 app.use(
   '/api',
   createProxyMiddleware({
@@ -91,13 +80,15 @@ const steam = new SteamAuth({
   apiKey: "B180F37955BEBCD1CFA8DF8E32ECC03E" // Steam API key
 });
 
+app.listen(process.env.PORT || app.get('port'), function () {
+  console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
+});
+
 const trades = require('./routes/trades');
 app.use('/trade', trades(connection, storage))
 
-
 const leaderboard = require('./routes/leaderboard')
 app.use("/leaderboard", leaderboard(connection));
-
 
 const profile = require('./routes/profile');
 app.use("/profile", profile(connection))
@@ -109,8 +100,10 @@ const threads = require('./routes/threads')
 app.use("/thread", threads(connection, storage));
 
 const road = require("./routes/road");
-
 app.use('/road', bodyParser.json(), road(connection));
+
+const viewGame = require('./routes/viewGame')
+app.use('/view/game', viewGame(connection));
 
 
 //#region Auth's
@@ -122,7 +115,7 @@ app.get("/steam/auth", async (req, res) => {
 app.get("/auth/steam/authenticate", async (req, res) => {
   try {
     //retreieve user auth data
-    const user = await steam.authenticate(req);    
+    const user = await steam.authenticate(req);
     console.log(user.username)
     userauthinfo = {
       userId: user.steamid,
@@ -138,10 +131,10 @@ app.get("/auth/steam/authenticate", async (req, res) => {
 
     const ban = await checkIfBan(user.steamid);
     if (!ban) {
-     
+
       uploadUserStats(user.steamid, "steam");
     }
-    
+
 
   } catch (error) {
     console.error(error);
@@ -165,7 +158,7 @@ app.get("/auth/:userId", async (req, res) => {
 
 app.get("/xbox/auth/grant", async (req, res) => {
   let code = req.query.code;
- 
+
   console.log(code);
   request.post({
     headers: {
@@ -177,7 +170,7 @@ app.get("/xbox/auth/grant", async (req, res) => {
       app_key: '8cd2a5fd-60b6-493a-944b-678eb528d32f'
     },
     json: true
-  }, async (error, response, body)=> {
+  }, async (error, response, body) => {
     if (error) throw error;
     let userId = body.xuid;
     let avatar = body.avatar;
@@ -193,14 +186,13 @@ app.get("/xbox/auth/grant", async (req, res) => {
     res.redirect(`https://web-app-a17c6.web.app/auth/${userId}`);
     const ban = await checkIfBan(userId);
     if (!ban) {
-     
+
       uploadUserStats(userId, "xbox");
     }
-    
+
   });
 
 });
-
 //#endregion
 
 //when you search a game the only think u want is the title, comp, rate, img and genre thus this shit should be stores in the database
@@ -261,8 +253,149 @@ app.get('/search/game', function (req, res) {
 
 });
 
-const viewGame = require('./routes/viewGame')
-app.use('/view/game', viewGame(connection));
+async function addNonRecordeddGame(response, gameId, platform) {
+ 
+  if (platform === "steam") {
+    const status = await getNoAchievementGame(gameId);
+
+    if (status == true) {
+      response.end();
+      return;
+    }
+  }
+
+  let title = await getGameTitle(gameId, platform);
+  if (title == 'error' || null) {
+    response.send("Error");
+    return;
+  }
+  gameToAdd = [];
+
+  gameToAdd[0] = gameId;
+  gameToAdd[1] = title;
+
+  //#region generalScrap
+  console.log("searching: " + title);
+  gamesExtraInfo = await getGamesCoverAndGenres(title);
+  gameToAdd[2] = JSON.stringify(gamesExtraInfo[1]);
+  gameToAdd[3] = platform;
+  gameToAdd[4] = gamesExtraInfo[0];
+  await addGames([gameToAdd]);
+  response.redirect("/search/game?game=" + gameId);
+  await delay(400);
+
+}
+
+function getGameTitle(gameId, platform) {
+  return new Promise((resolve, reject) => {
+    let urlXbox = 'https://xbl.io/api/v2/achievements/title/' + gameId;
+    let urlPs = 'https://m.np.playstation.com/api/trophy/v1/npCommunicationIds/' + gameId + '/trophyGroups?npServiceName=trophy';
+    let urlSteam = 'https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key=B180F37955BEBCD1CFA8DF8E32ECC03E&appid=' + gameId;
+    let url = 'dasfuq';
+    let headers = {};
+
+    switch (platform) {
+      case "steam":
+        url = urlSteam;
+        break;
+      case "ps":
+        url = urlPs;
+        headers = psHeaders;
+        break;
+      case "xbox":
+        url = urlXbox;
+        headers = xblHeaders;
+        break;
+    }
+    //console.log(url);
+    headers['Accept-Language'] = "en-en";
+    request({ headers: headers, uri: url }, function (err, res, body) {
+      if (err) throw err
+      console.log(body)
+      let parsedResponse;
+      parsedResponse = JSON.parse(body);
+
+      if (err || res.statusCode >= 400 || 'error' in parsedResponse || 'code' in parsedResponse || Object.keys(parsedResponse).length === 0) {
+        //  console.log(body)
+        // console.log("general error");
+        resolve("error");
+        return;
+      }
+      if (platform == "xbox" && parsedResponse.achievements.length == 0) {
+        // console.log("xbox error");
+        resolve("error");
+        return;
+      }
+      if (platform == "ps" && parsedResponse.trophyTitlePlatform != "PS4") {
+        //console.log("ps error");
+        resolve("error");
+        return;
+      }
+
+      if (platform == "steam" && Object.keys(parsedResponse.game).length == 0) {
+        resolve("error");
+        return;
+      }
+
+      let title;
+      switch (platform) {
+        case "steam":
+          request('https://api.steampowered.com/ISteamApps/GetAppList/v2/', function (err, res, body) {
+            if (err) { throw err }
+            appsResponse = JSON.parse(body);
+            appsResponse = appsResponse.applist.apps;
+            for (let i = 0; i < appsResponse.length; i++) {
+              if (appsResponse[i].appid == gameId) {
+                title = appsResponse[i].name;
+                console.log("eeeee");
+                resolve(title);
+                return;
+              }
+
+            }
+            resolve(null);
+          })
+          break;
+        case "ps":
+          title = parsedResponse.trophyTitleName;
+          resolve(title);
+          break;
+        case "xbox":
+          title = parsedResponse.achievements[0].titleAssociations[0].name;
+          resolve(title);
+          break;
+      }
+    });
+
+  });
+}
+
+function getNoAchievementGame(gameId) {
+  return new Promise((resolve, reject) => {
+    let url = 'https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key=B180F37955BEBCD1CFA8DF8E32ECC03E&appid=' + gameId;
+    request(url, (err, res, body) => {
+      let parsedResponse = JSON.parse(body);
+      if (Object.keys(parsedResponse.game).length == 0) {
+        console.log("Game with no .game ")
+        resolve(false);
+      } else {
+        if (parsedResponse.game.availableGameStats.achievements == undefined || parsedResponse.game.availableGameStats.achievements == null) {
+          console.log("it does not have achievements");
+          resolve(true);
+        } else {
+          resolve(false);
+          console.log("it does have achievements");
+        }
+      }
+    });
+  });
+}
+
+function delay(time) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, time)
+  });
+}
 
 
 app.get('/rate/:gameid', async (req, res) => {
@@ -418,157 +551,6 @@ function readTag(res, gameId, achievementId) {
   });
 }
 
-app.listen(process.env.PORT || app.get('port'), function () {
-  console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
-});
-
-function delay(time) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, time)
-  });
-}
-
-async function addNonRecordeddGame(response, gameId, platform) {
-  const placeholder = {
-    "gameId": gameId
-  }
-  if (platform === "steam") {
-    const status = await getNoAchievementGame(placeholder);
-
-    if (status == true) {
-      response.end();
-      return;
-    }
-  }
-
-  let title = await getGameTitle(gameId, platform);
-  if (title == 'error' || null) {
-    response.send("Error");
-    return;
-  }
-  gameToAdd = [];
-
-  gameToAdd[0] = gameId;
-  gameToAdd[1] = title;
-
-  //#region generalScrap
-  console.log("searching: " + title);
-  gamesExtraInfo = await getGamesCoverAndGenres(title);
-  gameToAdd[2] = JSON.stringify(gamesExtraInfo[1]);
-  gameToAdd[3] = platform;
-  gameToAdd[4] = gamesExtraInfo[0];
-  await addGames([gameToAdd]);
-  response.redirect("/search/game?game=" + gameId);
-  await delay(400);
-
-}
-
-function getGameTitle(gameId, platform) {
-  return new Promise((resolve, reject) => {
-    let urlXbox = 'https://xbl.io/api/v2/achievements/title/' + gameId;
-    let urlPs = 'https://m.np.playstation.com/api/trophy/v1/npCommunicationIds/' + gameId + '/trophyGroups?npServiceName=trophy';
-    let urlSteam = 'https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key=B180F37955BEBCD1CFA8DF8E32ECC03E&appid=' + gameId;
-    let url = 'dasfuq';
-    let headers = {};
-
-    switch (platform) {
-      case "steam":
-        url = urlSteam;
-        break;
-      case "ps":
-        url = urlPs;
-        headers = psHeaders;
-        break;
-      case "xbox":
-        url = urlXbox;
-        headers = xblHeaders;
-        break;
-    }
-    //console.log(url);
-    headers['Accept-Language'] = "en-en";
-    request({ headers: headers, uri: url }, function (err, res, body) {
-      if (err) throw err
-      console.log(body)
-      let parsedResponse;
-      parsedResponse = JSON.parse(body);
-
-      if (err || res.statusCode >= 400 || 'error' in parsedResponse || 'code' in parsedResponse || Object.keys(parsedResponse).length === 0) {
-        //  console.log(body)
-        // console.log("general error");
-        resolve("error");
-        return;
-      }
-      if (platform == "xbox" && parsedResponse.achievements.length == 0) {
-        // console.log("xbox error");
-        resolve("error");
-        return;
-      }
-      if (platform == "ps" && parsedResponse.trophyTitlePlatform != "PS4") {
-        //console.log("ps error");
-        resolve("error");
-        return;
-      }
-
-      if (platform == "steam" && Object.keys(parsedResponse.game).length == 0) {
-        resolve("error");
-        return;
-      }
-
-      let title;
-      switch (platform) {
-        case "steam":
-          request('https://api.steampowered.com/ISteamApps/GetAppList/v2/', function (err, res, body) {
-            if (err) { throw err }
-            appsResponse = JSON.parse(body);
-            appsResponse = appsResponse.applist.apps;
-            for (let i = 0; i < appsResponse.length; i++) {
-              if (appsResponse[i].appid == gameId) {
-                title = appsResponse[i].name;
-                console.log("eeeee");
-                resolve(title);
-                return;
-              }
-
-            }
-            resolve(null);
-          })
-          break;
-        case "ps":
-          title = parsedResponse.trophyTitleName;
-          resolve(title);
-          break;
-        case "xbox":
-          title = parsedResponse.achievements[0].titleAssociations[0].name;
-          resolve(title);
-          break;
-      }
-    });
-
-  });
-}
-
-function getNoAchievementGame(ownedGame) {
-  return new Promise((resolve, reject) => {
-    let url = 'https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key=B180F37955BEBCD1CFA8DF8E32ECC03E&appid=' + ownedGame.gameId;
-    request(url, (err, res, body) => {
-      let parsedResponse = JSON.parse(body);
-      if (Object.keys(parsedResponse.game).length == 0) {
-        console.log("Game with no .game ")
-        resolve(false);
-      } else {
-        if (parsedResponse.game.availableGameStats.achievements == undefined || parsedResponse.game.availableGameStats.achievements == null) {
-          console.log("it does not have achievements");
-          resolve(true);
-        } else {
-          resolve(false);
-          console.log("it does have achievements");
-        }
-      }
-    });
-  });
-}
-
-
 app.get("/price/:title", async (req, res) => {
 
   const title = req.params.title;
@@ -606,7 +588,7 @@ app.get("/unban/:userId", async (req, res) => {
 })
 
 
-const job = schedule.scheduleJob('*/4 * * * *', async (req, res) => {
+const job = schedule.scheduleJob('*/30 * * * *', async (req, res) => {
   isMaintenance = true;
   console.log("Running daily schedule");
 
@@ -647,11 +629,11 @@ const job = schedule.scheduleJob('*/4 * * * *', async (req, res) => {
     connection.query("CALL calculateGlobalScore", (err) => {
       if (err) throw err;
       console.log("global score recalculated");
-      isMaintenance=false;
+      isMaintenance = false;
     });
   } catch (error) {
     console.error("Error calling stored procedure:", error);
-    isMaintenance=false;
+    isMaintenance = false;
   }
 });
 
