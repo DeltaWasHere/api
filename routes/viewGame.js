@@ -223,7 +223,7 @@ module.exports = (connection) => {
 
       function getAchievementTags(gameId) {
         return (new Promise((resolve, reject) => {
-          const sql = 'select count(userId), achievementId, tag from tags where gameId="' + gameId + '" group by achievementId';
+          const sql = 'select count(userId), achievementId, tag from tags where gameId="' + gameId + '" group by achievementId, tag';
           connection.query(sql, function (err, result) {
             if (err) throw err;
             resolve(result);
