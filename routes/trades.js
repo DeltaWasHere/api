@@ -10,6 +10,13 @@ const { uploadBytes, ref, getDownloadURL } = require('firebase/storage')
 module.exports = (connection, storage) => {
   const uploadTrade = multer({ storage: multer.memoryStorage() });
   router.post('/:transaction', bodyParser.json(), uploadTrade.single('validation'), async (req, res) => {
+    Object.keys(req.body).forEach((key) => {
+      const value = req.body[key];
+      if (typeof value === 'string') {
+        // Remove all double quotation marks
+        req.body[key] = value.replace(/"/g, '');
+      }
+    });
     console.log(req.body);
     let transaction = req.params.transaction;
     let userId = req.get("userId");
