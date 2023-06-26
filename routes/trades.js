@@ -10,7 +10,25 @@ const { uploadBytes, ref, getDownloadURL } = require('firebase/storage')
 module.exports = (connection, storage) => {
   const uploadTrade = multer({ storage: multer.memoryStorage() });
   router.post('/:transaction', bodyParser.json(), uploadTrade.single('validation'), async (req, res) => {
-    console.log(req.body);
+    let formattedBody = req.body;
+
+    // Check if the specific malformed object is received
+    if (
+      typeof formattedBody === 'object' &&
+      formattedBody !== null &&
+      Object.keys(formattedBody).length === 1 &&
+      Object.values(formattedBody)[0].startsWith('"') &&
+      Object.values(formattedBody)[0].endsWith('"')
+    ) {
+      formattedBody = Object.entries(formattedBody).reduce((acc, [key, value]) => {
+        acc[key] = JSON.parse(value);
+        return acc;
+      }, {});
+    }
+  
+    // Use the formatted body as needed
+    console.log(formattedBody);
+    req.body = formattedBody;
     let transaction = req.params.transaction;
     let userId = req.get("userId");
     let gameId = req.get("gameId");
