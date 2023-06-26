@@ -20,6 +20,7 @@ module.exports = (connection, storage) => {
       try {
         // Attempt to parse the JSON string
         body = JSON.parse(jsonString);
+        body= body.replace("'", "");
       } catch (error) {
         console.error('Malformed request body:', req.body);
         return res.status(400).json({ error: 'Malformed request body' });
