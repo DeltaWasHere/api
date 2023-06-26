@@ -10,6 +10,7 @@ const { uploadBytes, ref, getDownloadURL } = require('firebase/storage')
 module.exports = (connection, storage) => {
   const uploadTrade = multer({ storage: multer.memoryStorage() });
   router.post('/:transaction', bodyParser.json(), uploadTrade.single('validation'), async (req, res) => {
+    console.log(req.body);
     let formattedBody = req.body;
 
     // Check if the specific malformed object is received
