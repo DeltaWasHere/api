@@ -10,26 +10,24 @@ const { uploadBytes, ref, getDownloadURL } = require('firebase/storage')
 module.exports = (connection, storage) => {
   const uploadTrade = multer({ storage: multer.memoryStorage() });
   router.post('/:transaction', bodyParser.json(), uploadTrade.single('validation'), async (req, res) => {
-    console.log(req.body);
-    let formattedBody = req.body;
+    let body = req.body;
 
-    // Check if the specific malformed object is received
-    if (
-      typeof formattedBody === 'object' &&
-      formattedBody !== null &&
-      Object.keys(formattedBody).length === 1 &&
-      Object.values(formattedBody)[0].startsWith('"') &&
-      Object.values(formattedBody)[0].endsWith('"')
-    ) {
-      formattedBody = Object.entries(formattedBody).reduce((acc, [key, value]) => {
-        acc[key] = JSON.parse(value);
-        return acc;
-      }, {});
-    }
+    // Check if the body is a malformed object
+    if (typeof body === 'object' && body !== null && !Array.isArray(body)) {
+      // Convert the malformed object to a JSON string
+      const jsonString = JSON.stringify(body);
   
-    // Use the formatted body as needed
-    console.log(formattedBody);
-    req.body = formattedBody;
+      try {
+        // Attempt to parse the JSON string
+        body = JSON.parse(jsonString);
+      } catch (error) {
+        console.error('Malformed request body:', req.body);
+        return res.status(400).json({ error: 'Malformed request body' });
+      }
+    }
+  req.body = body;
+    // Use the modified body object
+    console.log(body);
     let transaction = req.params.transaction;
     let userId = req.get("userId");
     let gameId = req.get("gameId");
