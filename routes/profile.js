@@ -143,7 +143,7 @@ module.exports = (connection) => {
 
       case "check":
         console.log(userId)
-
+res.send(status);
         break;
       default:
 
