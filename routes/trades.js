@@ -229,11 +229,12 @@ module.exports = (connection, storage) => {
 
   function makeTradeTransaction(tradeId, tradeTransaction, destinedId) {
     return new Promise((resolve, reject) => {
-      let sql, sql1;
+      let sql, sql1, sql2;
       console.log("transactioon: " + tradeTransaction);
       if (tradeTransaction === "1") {//accept
         sql = `UPDATE trade SET acceptedId = ${destinedId}, public = 0 WHERE tradeId = ${tradeId};`;
         sql1 = `UPDATE trade SET acceptedId = ${tradeId} WHERE tradeId = ${destinedId};`;
+        sql2 = `delete from trade where destinedId =${tradeId} and tradeId!=${destinedId} `
       } else {//decline
         sql = `delete FROM trade where tradeId=${destinedId}`;
       }
@@ -241,9 +242,12 @@ module.exports = (connection, storage) => {
       connection.query(sql, (err) => {
         if (err) { throw err; }
         if (sql1 != undefined) {
-          connection.query(sql1, (err) => {
-            if (err) { throw err }
-            resolve(true);
+          connection.query(sql1, (err1) => {
+            if (err1) { throw err1 }
+            connection.query(sql2, (err2)=>{
+              if (err2) throw err2;
+              resolve(true);
+            })
           });
         } else {
           resolve(false);
