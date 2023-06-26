@@ -127,7 +127,7 @@ module.exports = (connection) => {
         });
         break;
       case "guidesWrited":
-        sql = 'select achievementguides.guideId, achievementguides.gameId, achievementguides.content, achievementguides.votes, achievementguides.date, users.name, users.avatar, users.userId, game.name as gameTitle from achievementguides  INNER JOIN users ON achievementguides.userId = users.userId INNER JOIN games ON achievementguides.gameId=games.gameId AND   achievementguides.userId = "' + userId + '" AND achievementguides.public = 1;'
+        sql = 'select achievementguides.guideId, achievementguides.gameId, achievementguides.content, achievementguides.votes, achievementguides.date, users.name, users.avatar, users.userId, games.name as gameTitle from achievementguides  INNER JOIN users ON achievementguides.userId = users.userId INNER JOIN games ON achievementguides.gameId=games.gameId AND   achievementguides.userId = "' + userId + '" AND achievementguides.public = 1;'
         connection.query(sql, (err, response) => {
           if (err) throw err;
           res.send(response);
