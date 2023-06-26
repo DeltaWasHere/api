@@ -460,9 +460,9 @@ app.get('/vote/:vote', async (req, res) => {
     res.status(403).end();
     return;
   }
-  let vote = (req.params.vote == "true") ? true : false;
+  let vote = (req.params.vote == "true") ? 1 : -1;
   console.log();
-  let aux = [userId, guideId, +vote];
+  let aux = [userId, guideId, vote];
   let sql = 'insert into votes (userId, guideId, vote) VALUES (?) on duplicate Key update vote = VALUES(vote)';
   connection.query(sql, [aux], (error, result) => {
     if (error) {
