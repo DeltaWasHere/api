@@ -118,7 +118,7 @@ module.exports = (connection) => {
 
   function readGuide(gameId, achievementId) {
     return new Promise((resolve, reject) => {
-      let sql = 'select achievementguides.guideId, achievementguides.gameId, achievementguides.content, achievementguides.votes, achievementguides.date, users.name, users.avatar, users.userId from achievementguides INNER JOIN users ON achievementguides.userId = users.userId AND  achievementguides.gameId = "' + gameId + '"   AND achievementguides.achievementId = "' + achievementId + '" AND achievementguides.public = 1;';
+      let sql = 'select achievementguides.guideId, achievementguides.gameId, achievementguides.content, achievementguides.votes, achievementguides.date, users.name, users.avatar, users.userId from achievementguides INNER JOIN users ON achievementguides.userId = users.userId AND  achievementguides.gameId = "' + gameId + '"   AND achievementguides.achievementId = "' + achievementId + '" AND achievementguides.public = 1 order by achievementguides.votes DESC;';
       console.log(sql);
       connection.query(sql, (error, result) => {
         if (error) {
