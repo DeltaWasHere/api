@@ -1,1 +1,1 @@
-Pls dont doit its jsut a small school project
+A simple api from a school project
