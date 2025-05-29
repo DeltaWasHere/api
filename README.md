@@ -45,6 +45,7 @@ Some routes take a url parameter that then os being passed to a swtich, this sho
 
 Typescript could've helped a lot to prevent the usage of magic strings or properties and have a more robust structure of the models.
 
-### Horizontal and microservices: Node runs as an STA, therefore, we cannot block the thread it uses and scaling into raw CPU speed would eventually hit the roof. Instead of that, heavy services like the Web Scrap and the acheivements rarity calculator should be in their own application. Finally, a load balancer should be implemented to distribute the traffic between different instances of the main API and the Web Scrapp service. Of curse, this is only applies if we need to scale the application with a large ammount of users
+### Horizontal and microservices: 
+Node runs as an STA, therefore, we cannot block the thread it uses and scaling into raw CPU speed would eventually hit the roof. Instead of that, heavy services like the Web Scrap and the acheivements rarity calculator should be in their own application. Finally, a load balancer should be implemented to distribute the traffic between different instances of the main API and the Web Scrapp service. Of curse, this is only applies if we need to scale the application with a large ammount of users
 
 
