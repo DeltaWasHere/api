@@ -36,7 +36,8 @@ case "edit":
 `
 Some routes take a url parameter that then os being passed to a swtich, this should be decoupled into different routes using their corresponding methods.
 
-### The code is not decoupled in their respective files entirely: by this I mean that there are files that contain methods that shouln'd be there and be separated into their own module/file, with this we respect the solid principle o depdenency and give them a hierarchical structure
+### The code is not decoupled in their respective files entirely: 
+By this I mean that there are files that contain methods that shouln'd be there and be separated into their own module/file, with this we respect the solid principle o depdenency and give them a hierarchical structure
 
 ## Scalability and technical:
 ### Typescript should be the way:
