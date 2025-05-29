@@ -1,4 +1,5 @@
 This API is part of the backend for my Technician Career which featured a 700 pages of documentation(document is in private, pm me if you want to see it).
+Refere here for the [web-app](https://github.com/DeltaWasHere/web-app), [desktop-app](https://github.com/DeltaWasHere/desktop-app), [android-app](https://github.com/DeltaWasHere/grad-mobile-app) and [discord-bot](https://github.com/DeltaWasHere/discord-bot)
 
 The API revolved around fetching achievements and games data from the Steam, Xbox and PS as well as well as permit the users upload guides for achievements, leaderboards with points according to the rarity of an achievenets, catalog acheivements with tags, etc. 
 
@@ -47,5 +48,7 @@ Typescript could've helped a lot to prevent the usage of magic strings or proper
 
 ### Horizontal and microservices: 
 Node runs as an STA, therefore, we cannot block the thread it uses and scaling into raw CPU speed would eventually hit the roof. Instead of that, heavy services like the Web Scrap and the acheivements rarity calculator should be in their own application. Finally, a load balancer should be implemented to distribute the traffic between different instances of the main API and the Web Scrapp service. Of curse, this is only applies if we need to scale the application with a large ammount of users
+
+
 
 
