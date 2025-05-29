@@ -1,4 +1,3 @@
-![image](https://github.com/user-attachments/assets/6783d648-a1e1-47d1-9955-9b896d45004a)
 This API is part of the backend for my Technician Career which featured a 700 pages of documentation(document is in private, pm me if you want to see it).
 
 The API revolved around fetching achievements and games data from the Steam, Xbox and PS as well as well as permit the users upload guides for achievements, leaderboards with points according to the rarity of an achievenets, catalog acheivements with tags, etc. 
