@@ -6,7 +6,7 @@ The API revolved around fetching achievements and games data from the Steam, Xbo
 # $\color{red}{\textsf{By no means this project is perfect, in fact there are several bad practices and improvements that could've been made.}}$	
 
 ## War crime level mistakes
- ###API keys are inlined rather than in an .env file:
+### API keys are inlined rather than in an .env file:
 `
 let urlSteam = 'https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key=B180F37955BEBCD1CFA8DF8E32ECC03E&appid=' + gameId + "&l=" + language;
 `
