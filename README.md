@@ -3,8 +3,7 @@ Refer here for the [web app](https://github.com/DeltaWasHere/web-app), [desktop 
 
 The API revolves around fetching achievements and game data from Steam, Xbox, and PlayStation, as well as permitting users to upload achievement guides, leaderboards with points based on rarity, catalog achievements with tags, etc.
 
-# $\color{red}{\textsf{By no means is this project perfect; in fact, there are several 
-bad practices and improvements that could have been made.}}$	
+# $\color{red}{\textsf{By no means is this project perfect; in fact, there are several bad practices and improvements that could have been made.}}$	
 
 ## War crime level mistakes
 ### API keys are hardcoded instead of being stored in an .env file:
